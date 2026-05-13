@@ -38,7 +38,7 @@ function App() {
           element={
             <ProtectedRoute>
               <h1 className="p-10 text-3xl font-bold text-emerald-600">
-                This is dashboard protector 🔐{" "}
+                This dashboard is protected 🔐
               </h1>
             </ProtectedRoute>
           }

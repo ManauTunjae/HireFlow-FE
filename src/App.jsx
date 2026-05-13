@@ -1,17 +1,52 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { useContext } from "react";
 import { AuthContext } from "./context/AuthContext";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
-  const { user, loading } = useContext(AuthContext);
+  const { loading } = useContext(AuthContext);
 
-  if (loading) return <p>Laddar...</p>;
+  if (loading) {
+    return (
+      <div className="flex hscreen items-center justify-center">
+        <p className="text-xl font-semibold">Loading...</p>
+      </div>
+    );
+  }
 
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<h1>Startsida (Kommer snart)</h1>} />
-        <Route path="/login" element={<h1>Login-sida (Kommer snart)</h1>} />
+        <Route
+          path="/"
+          element={
+            <h1 className="p-10 text-3xl font-bold">
+              Homepage (Coming soon..) 🚀{" "}
+            </h1>
+          }
+        />
+        <Route
+          path="/login"
+          element={
+            <h1 className="p-10 text-3xl font-bold text-indigo-600">
+              Login-page (Coming soon) 🔑{" "}
+            </h1>
+          }
+        />
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute>
+              <h1 className="p-10 text-3xl font-bold text-emerald-600">
+                This is dashboard protector 🔐{" "}
+              </h1>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="*"
+          element={<h1 className="p-10 text-red-500">404 - Page not found</h1>}
+        />
       </Routes>
     </Router>
   );

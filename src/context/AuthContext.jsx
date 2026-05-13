@@ -29,7 +29,7 @@ export const AuthProvider = ({ children }) => {
       localStorage.setItem("recruiter_token", token);
       localStorage.setItem("recruiter_user", JSON.stringify(userData));
 
-      // Uppdatera axios headersoch state
+      // Uppdatera axios headers och state
       api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
       setUser(userData);
 
@@ -41,7 +41,7 @@ export const AuthProvider = ({ children }) => {
       );
       return {
         success: false,
-        message: error.response?.data?.message || "Login unsuccessfully",
+        message: error.response?.data?.message || "Login unsuccessful",
       };
     }
   };

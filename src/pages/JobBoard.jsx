@@ -19,7 +19,18 @@ const JobBoard = () => {
         </div>
       </header>
 
-      
+      <main className="max-w-5xl mx-auto px--4 py-12">
+        <div className="mb-8">
+            <h2 className="text-2xl font-bold mb-6 text-gray-800">
+                Latest Job Listings
+            </h2>
+            <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
+                <p className="text-gray-500 text-center py-8">
+                  No jobs available at the moment.
+                </p>
+            </div>
+        </div>
+      </main>
     </div>
   );
 };

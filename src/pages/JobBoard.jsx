@@ -8,8 +8,9 @@ const JobBoard = () => {
   useEffect(() => {
     const fetchJobs = async () => {
       try {
-        const response = await api.get("/jobs");
+        const response = await api.get("api/jobs");
         setJobs(response.data);
+        setLoading(false);
       } catch (error) {
         console.log("Error fetching jobs from Render:", error);
         setLoading(false);
@@ -37,11 +38,27 @@ const JobBoard = () => {
           <h2 className="text-2xl font-bold mb-6 text-gray-800">
             Latest Job Listings
           </h2>
-          <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
-            <p className="text-gray-500 text-center py-8">
-              No jobs available at the moment.
-            </p>
-          </div>
+          {loading ? (
+            <div className="flex justify-center items-center py-12">
+              <div className="rounded-xl boder border-geray-200 shadow-sm">
+                <p className="ml-3 text-geay-600 font-medium">
+                  Fetching jobs from Render...
+                </p>
+              </div>
+            </div>
+          ) : jobs.lenght === 0 ? (
+            <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
+              <p className="text-gray-500 text-center py-8">
+                No jobs available at the moment.
+              </p>
+            </div>
+          ) : (
+            <div className="space-y-4">
+              <p className="text-sm text-green-60 font-mediun">
+                Successfully loaded {jobs.length} job! Card is coming..
+              </p>
+            </div>
+          )}
         </div>
       </main>
     </div>

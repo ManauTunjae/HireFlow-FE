@@ -1,9 +1,22 @@
-import { useState, usrEffect } from "react";
+import { useState, useEffect } from "react";
 import api from "./../api/axiosInstance";
 
 const JobBoard = () => {
   const [jobs, setJobs] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchJobs = async () => {
+      try {
+        const response = await api.get("/jobs");
+        setJobs(response.data);
+      } catch (error) {
+        console.log("Error fetching jobs from Render:", error);
+        setLoading(false);
+      }
+    };
+    fetchJobs();
+  }, []);
 
   return (
     <div className="min-h-screen bg-gray-50 text-gray-900">
@@ -21,14 +34,14 @@ const JobBoard = () => {
 
       <main className="max-w-5xl mx-auto px--4 py-12">
         <div className="mb-8">
-            <h2 className="text-2xl font-bold mb-6 text-gray-800">
-                Latest Job Listings
-            </h2>
-            <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
-                <p className="text-gray-500 text-center py-8">
-                  No jobs available at the moment.
-                </p>
-            </div>
+          <h2 className="text-2xl font-bold mb-6 text-gray-800">
+            Latest Job Listings
+          </h2>
+          <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
+            <p className="text-gray-500 text-center py-8">
+              No jobs available at the moment.
+            </p>
+          </div>
         </div>
       </main>
     </div>

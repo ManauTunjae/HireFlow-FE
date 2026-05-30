@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { useContext } from "react";
 import { AuthContext } from "./context/AuthContext";
 import ProtectedRoute from "./components/ProtectedRoute";
+import { JobBoard } from "./pages/JobBoard";
 
 function App() {
   const { loading } = useContext(AuthContext);
@@ -17,14 +18,7 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route
-          path="/"
-          element={
-            <h1 className="p-10 text-3xl font-bold">
-              Homepage (Coming soon..) 🚀{" "}
-            </h1>
-          }
-        />
+        <Route path="/" element={<JobBoard />} />
         <Route
           path="/login"
           element={

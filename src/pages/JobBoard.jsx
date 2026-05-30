@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react";
 import api from "./../api/axiosInstance";
+import JobCard from "../components/JobCard";
 
 const JobBoard = () => {
   const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     const fetchJobs = async () => {
@@ -18,6 +20,15 @@ const JobBoard = () => {
     };
     fetchJobs();
   }, []);
+
+  const filteredJobs = jobs.filter((job) => {
+    const query = searchQuery.toLowerCase();
+    return (
+      job.title?.toLowerCase().includes(query) ||
+      job.company?.toLowerCase().includes(query) ||
+      job.location?.toLowerCase().includes(query)
+    );
+  });
 
   return (
     <div className="min-h-screen bg-gray-50 text-gray-900">
@@ -55,7 +66,7 @@ const JobBoard = () => {
           ) : (
             <div className="space-y-4">
               <p className="text-sm text-green-60 font-mediun">
-                Successfully loaded {jobs.length} job! Card is coming..
+                Successfully loaded {filteredJobs.length} job! Card is coming..
               </p>
             </div>
           )}

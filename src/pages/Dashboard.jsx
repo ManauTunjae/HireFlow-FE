@@ -95,7 +95,9 @@ const Dashboard = () => {
       <section className="w-80 bg-gray-900 border-r border-gray-800 flex flex-col">
         <div className="p-4 border-b border-gray-800 flex justify-between items-center bg-gray-900/50">
           <h2 className="font-bold text-lg tracking-wide">My Jobs</h2>
-          <button className="px-3 py-1.5 text-xs bg-indigo-600 hover:bg-indigo-500 text-white font-semibold rounded-md transition-colors shadow">
+          <button 
+            onclick={() => setIsModalsOpen(true)}
+            className="px-3 py-1.5 text-xs bg-indigo-600 hover:bg-indigo-500 text-white font-semibold rounded-md transition-colors shadow">
             + New Job
           </button>
         </div>

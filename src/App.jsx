@@ -3,6 +3,7 @@ import { useContext } from "react";
 import { AuthContext } from "./context/AuthContext";
 import ProtectedRoute from "./components/ProtectedRoute";
 import JobBoard from "./pages/JobBoard";
+import Dashboard from "./pages/Dashboard";
 
 function App() {
   const { loading } = useContext(AuthContext);
@@ -31,6 +32,7 @@ function App() {
           path="/dashboard"
           element={
             <ProtectedRoute>
+              <Dashboard />
               <h1 className="p-10 text-3xl font-bold text-emerald-600">
                 This dashboard is protected 🔐
               </h1>

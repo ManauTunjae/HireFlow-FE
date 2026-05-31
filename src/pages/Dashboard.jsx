@@ -1,4 +1,6 @@
 import { useState } from "react";
+import api from "./../api/axiosInstance";
+import JobCard from "../components/JobCard";
 
 const Dashboard = () => {
   const [selectedJob, setSelectedJob] = useState(null);

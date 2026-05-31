@@ -37,12 +37,25 @@ const Dashboard = () => {
               Stockholm - 5 candidates
             </p>
           </button>
-          <button className="w-full text-left p-3 bg-transparent hover:bg-gray-800/50 rounded-lg border border-transparent transition-all"> 
-            <h3 className="font-bold text-sm text-gray-300">Frontend React Intern</h3>
+          <button className="w-full text-left p-3 bg-transparent hover:bg-gray-800/50 rounded-lg border border-transparent transition-all">
+            <h3 className="font-bold text-sm text-gray-300">
+              Frontend React Intern
+            </h3>
             <p className="text-xs text-gray-500 mt-1">Remote • 2 Candidates</p>
           </button>
         </div>
       </section>
+
+      <main className="flex-1 bg-gray-950/40 flex flex-col">
+        <div className="p-6 border-b berder-gray-800 bg-gray-900/50">
+          <h1 className="text-2xl font-extrabold text-white">
+            Fullstack Developer
+          </h1>
+          <p className="text-sm text-gray-400 mt-1">
+            Manage pipeline and applicants for this position
+          </p>
+        </div>
+      </main>
     </div>
   );
 };

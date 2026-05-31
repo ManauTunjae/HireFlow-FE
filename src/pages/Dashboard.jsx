@@ -4,6 +4,8 @@ import JobCard from "../components/JobCard";
 
 const Dashboard = () => {
   const [selectedJob, setSelectedJob] = useState(null);
+  const [jobs, setJobs] = useState([]);
+  const [loading, setLoading] = (true);
 
   return (
     <div className="flex h-screen w-full bg-gray-900 text-gray-100 font-sans">

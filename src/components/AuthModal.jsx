@@ -7,7 +7,7 @@ const AuthModal = ({ isOpen, onClose }) => {
   const navigate = useNavigate();
 
   const [isRegister, setIsRegister] = useState(false);
-  const [formData, setFormData] = useState({ email: "", password: "" });
+  const [formData, setFormData] = useState({ username: "", email: "", password: "" });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -27,7 +27,7 @@ const AuthModal = ({ isOpen, onClose }) => {
       const result = await login(formData.email, formData.password);
 
       if (result.success) {
-        onclose();
+        onClose();
         // Just nu skickar vi dem till /dashboard, men i framtiden kan vi lägga en if-sats här:
         // if (user.role === 'candidate') { navigate('/candidate-dashboard') }
         navigate("/dashboard");
@@ -76,7 +76,7 @@ const AuthModal = ({ isOpen, onClose }) => {
         <form onSubmit={handleSubmit} className="space-y-5 text-sm">
           {isRegister && (
             <div>
-              <label className="block text-xl font-bold text-gray-700 mb-1.5 uppercase tracking-wider">
+              <label className="block text-m font-bold text-gray-700 mb-1.5 uppercase tracking-wider">
                 Username
               </label>
               <input

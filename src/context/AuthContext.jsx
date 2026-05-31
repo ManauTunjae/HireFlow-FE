@@ -22,8 +22,14 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (email, password) => {
     try {
-      const response = await api.post("/auth/login", { email, password });
-      const { token, user: userData } = response.data;
+      const response = await api.post("api/auth/login", { email, password });
+
+      const userData = response.data.user;
+      const token = userData?.token;
+
+      if (!token) {
+        return { success: false, message: "No token returned from server" };
+      }
 
       // Spara i localStorage så man slipper logga in igen vid refresh
       localStorage.setItem("recruiter_token", token);

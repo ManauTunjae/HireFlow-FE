@@ -2,7 +2,7 @@ import { useState, useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 
-const AuthModal = ({ isOpen, OnClose }) => {
+const AuthModal = ({ isOpen, onClose }) => {
   const { login } = useContext(AuthContext);
   const navigate = useNavigate();
 
@@ -34,7 +34,7 @@ const AuthModal = ({ isOpen, OnClose }) => {
       } else {
         setError(result.message || "Invalid credential!");
       }
-    } catch (error) {
+    } catch {
       setError("Something wentwrong. Please try again.");
     } finally {
       setLoading(false);

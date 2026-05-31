@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import api from "./../api/axiosInstance";
 import JobCard from "../components/JobCard";
+import AuthModal from "../components/AuthModal"
 
 const JobBoard = () => {
   const [jobs, setJobs] = useState([]);

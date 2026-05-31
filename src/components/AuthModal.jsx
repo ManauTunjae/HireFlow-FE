@@ -42,7 +42,7 @@ const AuthModal = ({ isOpen, onClose }) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-black/70 backdrop-blur-md flex items-center justify-center z-50 p-4">
+    <div className="fixed inset-0 bg-black/60 backdrop-blur-xs flex items-center justify-center z-40 p-4">
       {/* Modalkortet */}
       <div className="bg-white text-gray-900 w-full max-w-sm rounded-2xl shadow-2xl p-8 relative border border-gray-100 animate-in fade-in zoom-in-95 duration-200">
         {/* Stängknapp */}
@@ -54,11 +54,11 @@ const AuthModal = ({ isOpen, onClose }) => {
         </button>
 
         {/* Titel */}
-        <div className="text-center mb-6">
-          <h3 className="text-2xl font-black text-gray-900 tracking-tight">
+        <div className="text-center mb-8">
+          <h3 className="text-3xl font-black text-gray-900 tracking-tight">
             {isRegister ? "Create Account" : "Welcome Back"}
           </h3>
-          <p className="text-xs text-gray-500 mt-1">
+          <p className="text-m text-gray-500 mt-10">
             {isRegister
               ? "Sign up to track your applications"
               : "Sign in to manage your HireFlow"}
@@ -72,11 +72,11 @@ const AuthModal = ({ isOpen, onClose }) => {
           </div>
         )}
 
-        {/* Formulär */}
-        <form onSubmit={handleSubmit} className="space-y-4 text-sm">
+        {/* Form */}
+        <form onSubmit={handleSubmit} className="space-y-5 text-sm">
           {isRegister && (
             <div>
-              <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wider">
+              <label className="block text-xl font-bold text-gray-700 mb-1.5 uppercase tracking-wider">
                 Username
               </label>
               <input
@@ -86,14 +86,14 @@ const AuthModal = ({ isOpen, onClose }) => {
                 onChange={(e) =>
                   setFormData({ ...formData, username: e.target.value })
                 }
-                className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-transparent transition-all"
+                className="w-full bg-gray-100/70 border border-gray-200/80 rounded-xl px-4 py-3.5 text-gray-950 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all shadow-sm"
                 placeholder="Your Name"
               />
             </div>
           )}
 
           <div>
-            <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wider">
+            <label className="block text-m font-bold text-gray-700 mb-1.5 uppercase tracking-wider">
               Email Address
             </label>
             <input
@@ -109,7 +109,7 @@ const AuthModal = ({ isOpen, onClose }) => {
           </div>
 
           <div>
-            <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wider">
+            <label className="block text-m font-bold text-gray-700 mb-1 uppercase tracking-wider">
               Password
             </label>
             <input
@@ -135,7 +135,7 @@ const AuthModal = ({ isOpen, onClose }) => {
         </form>
 
         {/* Footer: Växla mellan logga in / skapa konto */}
-        <div className="text-center mt-6 pt-4 border-t border-gray-100 text-xs text-gray-500">
+        <div className="text-center mt-6 pt-4 border-t border-gray-100 text-m text-gray-500">
           {isRegister ? "Already have an account?" : "New to HireFlow?"}{" "}
           <button
             onClick={() => {

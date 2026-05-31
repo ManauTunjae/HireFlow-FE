@@ -1,12 +1,13 @@
 import { useState, useEffect } from "react";
 import api from "./../api/axiosInstance";
 import JobCard from "../components/JobCard";
-import AuthModal from "../components/AuthModal"
+import AuthModal from "../components/AuthModal";
 
 const JobBoard = () => {
   const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
 
   useEffect(() => {
     const fetchJobs = async () => {
@@ -42,6 +43,22 @@ const JobBoard = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 text-gray-900">
+      {/* Login */}
+      <nav className="sticky top-0 bg-white/80 backdrop-blur-md border-b border-gray-200 px-6 py-4 z-40">
+        <div className="max-w-5xl mx-auto flex justify-between items-center">
+          <span className="text-xl font-black text-gray-950 tracking-tighter">
+            Hire<span className="text-indigo-600">Flow</span>
+          </span>
+
+          {/* Login-button */}
+          <button
+            onClick={() => setIsAuthModalOpen(true)}
+            className="px-4 py-2 text-sm font-bold text-gray-700 hover:text-gray-950 border border-gray-200 hover:border-gray-900 rounded-xl bg-white shadow-sm transition-all"
+          >
+            Sign In
+          </button>
+        </div>
+      </nav>
       <header className="bg-white border-b border-gray-200 py-16 text-center">
         <div className="max-w-3xl mx-auto">
           <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight text-gray-900 mb-4">
@@ -57,6 +74,10 @@ const JobBoard = () => {
       <main className="max-w-5xl mx-auto px--4 py-12">
         {/* search job */}
         <div className="mb-10">
+          <AuthModal
+            isOpen={isAuthModalOpen}
+            onClose={() => setIsAuthModalOpen(false)}
+          />
           <div className="max-w-md">
             <label
               htmlFor="search"

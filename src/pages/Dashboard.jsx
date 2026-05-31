@@ -55,6 +55,20 @@ const Dashboard = () => {
             Manage pipeline and applicants for this position
           </p>
         </div>
+        <div className="w-72 flex-shrink-0 bg-gray-900/80 p-4 rounded-xl border border-gray-800 flex flex-col h-fit max-h-full">
+          <div className="flex justify-between items-center mb-4">
+            <span className="font-bold text-sm text-gray-300 tracking-wide uppercase">
+              New Applied
+            </span>
+            <span className="px-2 py-0.5 text-xs bg-gray-800 text-gray-400 rounded-md font-bold">
+              1
+            </span>
+          </div>
+          <div className="bg-gray-850 p-3 rounded-lg border border-gray-800 shadow-sm hover:border-gray-700 cursor-pointer">
+            <h4 className="font-bold text-sm text-white">Manau Tunjae</h4>
+            <p className="text-xs text-gray-400 mt-1">manau@example.com</p>
+          </div>
+        </div>
       </main>
     </div>
   );

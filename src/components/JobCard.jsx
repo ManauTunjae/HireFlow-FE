@@ -1,10 +1,8 @@
-import React from "react";
-
 const JobCard = ({ job }) => {
   const { title, company, location, salary, description } = job;
 
   return (
-    <div className="bg-white p-6 border border-gray-200 shadow-sm hover:shadow-md transition-shadow duration-200 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+    <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-shadow duration-200 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
       <div className="space-y-2">
         <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-50 text-indigo-700 border border-indigo-100">
           New
@@ -31,7 +29,7 @@ const JobCard = ({ job }) => {
         )}
       </div>
       <div className="flex items-center mt-4 md:mt-0">
-        <button className="w-full md:w:auto px-5 py-2.5 bg-gray-950 text-white text-sm font-semibold rounded-lg hover:bg-geay-800 transition-colors">
+        <button className="w-full md:w-auto px-5 py-2.5 bg-gray-950 text-white text-sm font-semibold rounded-lg hover:bg-gray-800 transition-colors">
           Apply Now
         </button>
       </div>

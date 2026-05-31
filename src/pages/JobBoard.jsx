@@ -11,7 +11,16 @@ const JobBoard = () => {
     const fetchJobs = async () => {
       try {
         const response = await api.get("api/jobs");
-        setJobs(response.data);
+        console.log("Jobs fetched from Render:", response.data);
+        if (response.data && Array.isArray(response.data)) {
+          setJobs(response.data);
+        } else if (response.data && Array.isArray(response.data.jobs)) {
+          setJobs(response.data.jobs);
+        } else if (response.data && Array.isArray(response.data.data)) {
+          setJobs(response.data.data);
+        } else {
+          setJobs([]);
+        }
         setLoading(false);
       } catch (error) {
         console.log("Error fetching jobs from Render:", error);
@@ -45,29 +54,57 @@ const JobBoard = () => {
       </header>
 
       <main className="max-w-5xl mx-auto px--4 py-12">
+        {/* search job */}
+        <div className="mb-10">
+          <div className="max-w-md">
+            <label
+              htmlFor="search"
+              className="block text-sm font-semibold text-gray-700 mb-2"
+            >
+              Search oppotunities
+            </label>
+            <input
+              id="search"
+              type="text"
+              placeholder="Search by title, company or location..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="block w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+            />
+          </div>
+        </div>
+
+        {/* Job list */}
+        <div className="text-2xl font-bold mb-6 text-gray-800">
+          <h2 className="text-2xl font-bold mb-6 text-gray-800">
+            {searchQuery ? "Search Results" : "Latest Jobs Listings"}
+          </h2>
+        </div>
+
         <div className="mb-8">
           <h2 className="text-2xl font-bold mb-6 text-gray-800">
             Latest Job Listings
           </h2>
           {loading ? (
             <div className="flex justify-center items-center py-12">
-              <div className="rounded-xl boder border-geray-200 shadow-sm">
-                <p className="ml-3 text-geay-600 font-medium">
-                  Fetching jobs from Render...
-                </p>
-              </div>
+              <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-indigo-600"></div>
+              <p className="ml-3 text-gray-600 font-medium">
+                Fetching jobs from Render...
+              </p>
             </div>
-          ) : jobs.lenght === 0 ? (
-            <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
-              <p className="text-gray-500 text-center py-8">
-                No jobs available at the moment.
+          ) : filteredJobs.length === 0 ? (
+            <div className="bg-white p-8 rounded-xl border border-gray-200 shadow-sm text-center">
+              <p className="text-gray-500 py-4">
+                {searchQuery
+                  ? "No jobs match your search."
+                  : "No jobs available at the moment."}
               </p>
             </div>
           ) : (
             <div className="space-y-4">
-              <p className="text-sm text-green-60 font-mediun">
-                Successfully loaded {filteredJobs.length} job! Card is coming..
-              </p>
+              {filteredJobs.map((job) => (
+                <JobCard key={job._id || job.id} job={job} />
+              ))}
             </div>
           )}
         </div>

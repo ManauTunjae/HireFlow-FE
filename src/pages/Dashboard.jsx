@@ -37,6 +37,10 @@ const Dashboard = () => {
               Stockholm - 5 candidates
             </p>
           </button>
+          <button className="w-full text-left p-3 bg-transparent hover:bg-gray-800/50 rounded-lg border border-transparent transition-all"> 
+            <h3 className="font-bold text-sm text-gray-300">Frontend React Intern</h3>
+            <p className="text-xs text-gray-500 mt-1">Remote • 2 Candidates</p>
+          </button>
         </div>
       </section>
     </div>

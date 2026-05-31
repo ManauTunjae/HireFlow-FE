@@ -6,6 +6,13 @@ const AuthModal = ({isOpen, OnClose}) => {
     const { login } = useContext(AuthContext);
     const navigate = useNavigate();
 
+    const [isRegister, setIsRegister] = useState(false);
+    const [formData, setFormData] = useState({email: "", password: ""});
+    const [error, setError] = useState("");
+    const [loading, setLoading] = useState(false);
+
+    
+
     return (
 
     )

@@ -27,7 +27,17 @@ const Dashboard = () => {
             + New Job
           </button>
         </div>
-        
+
+        <div className="flex-1 overflow-y-auto p-3 flex flex-col gap-2">
+          <button className="w-full text-left bg-gray-850 rounded-lg border border-indigo-500 transition-all">
+            <h3 className="font-bold text-sm text-white">
+              Fullstack Developer
+            </h3>
+            <p className="text-xs text-gray-400 mt-1">
+              Stockholm - 5 candidates
+            </p>
+          </button>
+        </div>
       </section>
     </div>
   );

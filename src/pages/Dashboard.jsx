@@ -5,7 +5,33 @@ import JobCard from "../components/JobCard";
 const Dashboard = () => {
   const [selectedJob, setSelectedJob] = useState(null);
   const [jobs, setJobs] = useState([]);
-  const [loading, setLoading] = (true);
+  const [loading, setLoading] = true;
+
+  useEffect(() => {
+    const fetchHRJobs = async () => {
+      try {
+        const response = await api.get("api/jobs/my-jobs");
+        let jobsArray = [];
+        if (response.data && Array.isArray(response.data)) {
+          jobsArray = response.data;
+        } else if (response.data && Array.isArray(response.data.jobs)) {
+          jobsArray = response.data.jobs;
+        } else if (response.data && Array.isArray(response.data.data)) {
+          jobsArray = response.data.data;
+        }
+        setJobs(jobsArray);
+
+        if (jobsArray.length > 0) {
+          setSelectedJob(jobsArray[0]);
+        }
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching HE jobs:", error);
+        setLoading(false);
+      }
+    };
+    fetchHRJobs();
+  }, []);
 
   return (
     <div className="flex h-screen w-full bg-gray-900 text-gray-100 font-sans">

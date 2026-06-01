@@ -11,6 +11,15 @@ const AuthModal = ({ isOpen, onClose }) => {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+    username: "",
+    company: "",
+  });
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+
   if (!isOpen) return null;
 
   const handleSubmit = async (e) => {
@@ -19,7 +28,7 @@ const AuthModal = ({ isOpen, onClose }) => {
     setLoading(true);
     try {
       if (isRegister) {
-        setError("Registration coming soon, try Log In instead!");
+        setError(`Register ${role}, try Log In instead!`);
         setLoading(false);
         return;
       }

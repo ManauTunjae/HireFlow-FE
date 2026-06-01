@@ -1,6 +1,8 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import api from "./../api/axiosInstance";
-import JobFormModal from "../components/JobFormModal"; // Importera den nya komponenten!
+import { AuthContext } from "../context/AuthContext";
+import JobFormModal from "../components/JobFormModal";
 
 const Dashboard = () => {
   const [jobs, setJobs] = useState([]);
@@ -12,7 +14,10 @@ const Dashboard = () => {
   const [formError, setFormError] = useState("");
   const [formLoading, setFormLoading] = useState(false);
 
-  // Lyft ut fetch-funktionen till glesbygden så att den kan nås överallt i filen!
+  const { logout } = useContext(AuthContext);
+  const navigate = useNavigate();
+
+  // Lyft ut fetch-funktionen till glesbygden så att den kan nås överallt i filen
   const fetchHRJobs = async () => {
     try {
       const response = await api.get("api/jobs/my-jobs"); // Hämtar bara HR-personens egna jobb
@@ -39,7 +44,7 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchJobs = async () => {
       try {
-        const response = await api.get("api/jobs");
+        const response = await api.get("api/jobs/my-jobs");
         console.log("Jobs fetched from Render:", response.data);
         if (response.data && Array.isArray(response.data)) {
           setJobs(response.data);
@@ -64,9 +69,9 @@ const Dashboard = () => {
     setFormError("");
     setFormLoading(true);
     try {
-      await api.post("api/jobs", jobData); // Skickar med kraven som en [String]-array!
-      setIsModalOpen(false); // Stäng modalen
-      fetchHRJobs(); // Ladda om listan live!
+      await api.post("api/jobs", jobData);
+      setIsModalOpen(false);
+      fetchHRJobs();
     } catch (error) {
       setFormError(
         error.response?.data?.message ||
@@ -77,21 +82,34 @@ const Dashboard = () => {
     }
   };
 
+  const handleLogout = () => {
+    logout(navigate);
+  };
+
   return (
     <div className="flex h-screen w-full bg-gray-900 text-gray-100 font-sans">
       {/* 1. SIDOMENY */}
       <aside className="w-16 bg-gray-950 border-r border-gray-800 flex flex-col items-center py-6 gap-6">
-        <div className="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center font-bold text-white shadow-lg">
-          HF
+        <div className="flex flex-col items-center gap-6">
+          <div className="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center font-bold text-white shadow-lg">
+            HF
+          </div>
+          <button className="p-2 text-indigo-400 hover:bg-gray-800 rounded-lg transition-colors">
+            💼
+          </button>
+          <button className="p-2 text-gray-400 hover:bg-gray-800 rounded-lg transition-colors">
+            👥
+          </button>
+          <button className="p-2 text-gray-400 hover:bg-gray-800 rounded-lg transition-colors">
+            ⚙️
+          </button>
         </div>
-        <button className="p-2 text-indigo-400 hover:bg-gray-800 rounded-lg transition-colors">
-          💼
-        </button>
-        <button className="p-2 text-gray-400 hover:bg-gray-800 rounded-lg transition-colors">
-          👥
-        </button>
-        <button className="p-2 text-gray-400 hover:bg-gray-800 rounded-lg transition-colors">
-          ⚙️
+        <button
+          onClick={handleLogout}
+          title="Log out"
+          className="p-2 text-gray-500 hover:text-red-400 hover:bg-red-950/40 rounded-lg transition-all"
+        >
+          🚪
         </button>
       </aside>
 

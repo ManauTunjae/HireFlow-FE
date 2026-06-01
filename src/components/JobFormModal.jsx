@@ -7,7 +7,7 @@ const JobFormModal = ({ isOpen, onClose, onSubmit, formLoading, formError }) => 
     location: "",
     salary: "",
     description: "",
-    requirements: "", // Håller texten tillfälligt innan vi splittar den
+    requirements: "", 
   });
 
   if (!isOpen) return null;

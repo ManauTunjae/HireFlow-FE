@@ -7,7 +7,7 @@ const AuthModal = ({ isOpen, onClose }) => {
   const navigate = useNavigate();
 
   const [isRegister, setIsRegister] = useState(false);
-  const [formData, setFormData] = useState({ username: "", email: "", password: "" });
+  const [role, setRole] = useState("candidate");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -17,8 +17,6 @@ const AuthModal = ({ isOpen, onClose }) => {
     username: "",
     company: "",
   });
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
 
   if (!isOpen) return null;
 
@@ -82,6 +80,38 @@ const AuthModal = ({ isOpen, onClose }) => {
         )}
 
         {/* Form */}
+        {isRegister && (
+          <div className="mb-6">
+            <label className="block text-xs font-bold text-gray-700 mb-2 uppercase tracking-wider text-center">
+              I want to join as:
+            </label>
+            <div className="grid grid-cols-2 gap-2 p-1 bg-gray-200/60 rounded-xl">
+              <button
+                type="button"
+                onClick={() => setRole("candidate")}
+                className={`py-2 text-xs font-bold rounded-lg transition-all ${
+                  role === "candidate"
+                    ? "bg-white text-gray-950 shadow"
+                    : "text-gray-500 hover:text-gray-950"
+                }`}
+              >
+                👤 Candidate
+              </button>
+              <button
+                type="button"
+                onClick={() => setRole("recruiter")}
+                className={`py-2 text-xs font-bold rounded-lg transition-all ${
+                  role === "recruiter"
+                    ? "bg-white text-indigo-600 shadow"
+                    : "text-gray-500 hover:text-gray-950"
+                }`}
+              >
+                🏢 Recruiter
+              </button>
+            </div>
+          </div>
+        )}
+
         <form onSubmit={handleSubmit} className="space-y-5 text-sm">
           {isRegister && (
             <div>
@@ -101,8 +131,26 @@ const AuthModal = ({ isOpen, onClose }) => {
             </div>
           )}
 
+          {isRegister && role === "recruiter" && (
+            <div className="animate-in fade-in slide-in-from-top-2 duration-200">
+              <label className="block text-xs font-bold text-gray-700 mb-1.5 uppercase tracking-wider">
+                Company Name *
+              </label>
+              <input
+                type="text"
+                required={role === "recruiter"} // Krävs bara om man är HR!
+                value={formData.company}
+                onChange={(e) =>
+                  setFormData({ ...formData, company: e.target.value })
+                }
+                className="w-full bg-gray-100/70 border border-gray-200/80 rounded-xl px-4 py-3 text-gray-950 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all"
+                placeholder="e.g. Acme Corporation"
+              />
+            </div>
+          )}
+
           <div>
-            <label className="block text-m font-bold text-gray-700 mb-1.5 uppercase tracking-wider">
+            <label className="block text-xs font-bold text-gray-700 mb-1.5 uppercase tracking-wider">
               Email Address
             </label>
             <input
@@ -112,13 +160,13 @@ const AuthModal = ({ isOpen, onClose }) => {
               onChange={(e) =>
                 setFormData({ ...formData, email: e.target.value })
               }
-              className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-transparent transition-all"
+              className="w-full bg-gray-100/70 border border-gray-200/80 rounded-xl px-4 py-3 text-gray-950 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all"
               placeholder="you@example.com"
             />
           </div>
 
           <div>
-            <label className="block text-m font-bold text-gray-700 mb-1 uppercase tracking-wider">
+            <label className="block text-xs font-bold text-gray-700 mb-1.5 uppercase tracking-wider">
               Password
             </label>
             <input
@@ -128,18 +176,21 @@ const AuthModal = ({ isOpen, onClose }) => {
               onChange={(e) =>
                 setFormData({ ...formData, password: e.target.value })
               }
-              className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-transparent transition-all"
+              className="w-full bg-gray-100/70 border border-gray-200/80 rounded-xl px-4 py-3 text-gray-950 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all"
               placeholder="••••••••"
             />
           </div>
 
-          {/* Logga in-knapp */}
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-3 bg-gray-950 hover:bg-gray-800 text-white font-semibold rounded-xl transition-colors shadow-md disabled:opacity-50 mt-2"
+            className="w-full py-3.5 bg-gray-950 hover:bg-gray-800 text-white font-bold rounded-xl transition-all shadow-lg disabled:opacity-50 mt-4 tracking-wide"
           >
-            {loading ? "Authenticating..." : isRegister ? "Sign Up" : "Sign In"}
+            {loading
+              ? "Processing..."
+              : isRegister
+                ? "Create Account"
+                : "Sign In"}
           </button>
         </form>
 

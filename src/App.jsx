@@ -21,21 +21,10 @@ function App() {
       <Routes>
         <Route path="/" element={<JobBoard />} />
         <Route
-          path="/login"
-          element={
-            <h1 className="p-10 text-3xl font-bold text-indigo-600">
-              Login-page (Coming soon) 🔑{" "}
-            </h1>
-          }
-        />
-        <Route
           path="/dashboard"
           element={
             <ProtectedRoute>
               <Dashboard />
-              <h1 className="p-10 text-3xl font-bold text-emerald-600">
-                This dashboard is protected 🔐
-              </h1>
             </ProtectedRoute>
           }
         />

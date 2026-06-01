@@ -3,7 +3,7 @@ import { AuthContext } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 
 const AuthModal = ({ isOpen, onClose }) => {
-  const { login } = useContext(AuthContext);
+  const { login, register } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const [isRegister, setIsRegister] = useState(false);
@@ -26,20 +26,30 @@ const AuthModal = ({ isOpen, onClose }) => {
     setLoading(true);
     try {
       if (isRegister) {
-        setError(`Register ${role}, try Log In instead!`);
-        setLoading(false);
-        return;
+        const result = await register(
+          formData.username,
+          formData.email,
+          formData.password,
+          role,
+          formData.company,
+        );
+
+        if (result.success) {
+          onClose();
+          navigate("/dashboard"); // Skicka direkt till dashboarden vid registrering!
+        } else {
+          setError(result.message || "Registration failed. Try again.");
+        }
+        return; // Stoppa här så den inte kör login-koden under!
       }
 
       const result = await login(formData.email, formData.password);
 
       if (result.success) {
         onClose();
-        // Just nu skickar vi dem till /dashboard, men i framtiden kan vi lägga en if-sats här:
-        // if (user.role === 'candidate') { navigate('/candidate-dashboard') }
         navigate("/dashboard");
       } else {
-        setError(result.message || "Invalid credential!");
+        setError(result.message || "Invalid credentials!");
       }
     } catch {
       setError("Something wentwrong. Please try again.");

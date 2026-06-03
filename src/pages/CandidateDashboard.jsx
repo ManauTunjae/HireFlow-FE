@@ -39,8 +39,11 @@ const CandidateDashboard = () => {
         console.error("Error fetching candidate data:", error);
         setLoading(false);
       }
-    }  
-  }) 
+    }
+    if (user) {
+      fetchCandidateData();
+    }
+  }, [user]);
 
   return (
     <div className="min-h-screen bg-gray-950 text-gray-100 font-sans flex flex-col">

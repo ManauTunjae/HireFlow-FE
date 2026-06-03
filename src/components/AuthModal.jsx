@@ -36,18 +36,29 @@ const AuthModal = ({ isOpen, onClose }) => {
 
         if (result.success) {
           onClose();
-          navigate("/dashboard"); // Skicka direkt till dashboarden vid registrering!
+          if (role === "candidate") {
+            navigate("/candidate-dashboard");
+          } else {
+            navigate("/recruiter-dashboard");
+          }
         } else {
           setError(result.message || "Registration failed. Try again.");
         }
-        return; // Stoppa här så den inte kör login-koden under!
+        return;
       }
 
       const result = await login(formData.email, formData.password);
 
       if (result.success) {
         onClose();
-        navigate("/dashboard");
+
+        const savedUser = JSON.parse(localStorage.getItem("recruiter_user"));
+
+        if (savedUser.role === "candidate") {
+          navigate("/candidate-dashboard");
+        } else {
+          navigate("/recruiter-dashboard");
+        }
       } else {
         setError(result.message || "Invalid credentials!");
       }

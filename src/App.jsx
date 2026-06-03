@@ -4,6 +4,7 @@ import { AuthContext } from "./context/AuthContext";
 import ProtectedRoute from "./components/ProtectedRoute";
 import JobBoard from "./pages/JobBoard";
 import Dashboard from "./pages/Dashboard";
+import CandidateDashboard from "./pages/CandidateDashboard";
 
 function App() {
   const { loading } = useContext(AuthContext);
@@ -21,10 +22,18 @@ function App() {
       <Routes>
         <Route path="/" element={<JobBoard />} />
         <Route
-          path="/dashboard"
+          path="/recruiter-dashboard"
           element={
             <ProtectedRoute>
               <Dashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/candidate-dashboard"
+          element={
+            <ProtectedRoute>
+              <CandidateDashboard />
             </ProtectedRoute>
           }
         />

@@ -22,7 +22,7 @@ function App() {
       <Routes>
         <Route path="/" element={<JobBoard />} />
         <Route
-          path="/dashboard"
+          path="/recruiter-dashboard"
           element={
             <ProtectedRoute>
               <Dashboard />

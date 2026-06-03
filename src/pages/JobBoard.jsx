@@ -42,7 +42,7 @@ const JobBoard = () => {
   });
 
   return (
-    <div className="min-h-screen bg-gray-50 text-gray-900">
+    <div className="min-h-screen bg-gray-50 text-gray-900 px-3.5">
       {/* Login */}
       <nav className="sticky top-0 bg-white/80 backdrop-blur-md border-b border-gray-200 px-6 py-4 z-40">
         <div className="max-w-5xl mx-auto flex justify-between items-center">
@@ -71,17 +71,17 @@ const JobBoard = () => {
         </div>
       </header>
 
-      <main className="max-w-5xl mx-auto px--4 py-12">
+      <main className="max-w-5xl mx-auto px-3 py-12">
         {/* search job */}
         <div className="mb-10">
           <AuthModal
             isOpen={isAuthModalOpen}
             onClose={() => setIsAuthModalOpen(false)}
           />
-          <div className="max-w-md">
+          <div className="max-w-md mx-auto text-md">
             <label
               htmlFor="search"
-              className="block text-sm font-semibold text-gray-700 mb-2"
+              className="block text-md font-semibold text-gray-700 mb-2"
             >
               Search oppotunities
             </label>

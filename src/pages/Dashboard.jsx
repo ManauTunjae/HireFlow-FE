@@ -5,6 +5,7 @@ import api from "../api/axiosInstance";
 const Dashboard = () => {
   const { user, logout } = useContext(AuthContext);
   const [jobs, setJobs] = useState([]);
+  const [allCandidates, setAllCandidates] = useState([]);
   const [selectedJob, setSelectedJob] = useState(null);
   const [loading, setLoading] = useState(true);
 

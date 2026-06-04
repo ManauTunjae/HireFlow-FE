@@ -116,9 +116,9 @@ const CandidateDashboard = () => {
           </span>
           <button
             onClick={logout}
-            className="text-xs font-bold text-gray-400 hover:text-red-500 transition-all uppercase tracking-wider whitespace-nowrap"
+            className="px-3 py-1.5 bg-red-600 hover:bg-red-900 text-white text-xs font-bold rounded-lg transition-all"
           >
-            Log Out 🚪
+            Sign out
           </button>
         </div>
       </nav>

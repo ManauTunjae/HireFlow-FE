@@ -67,22 +67,22 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 text-gray-800 font-sans flex flex-col">
+    <div className="min-h-screen bg-gray-900 text-gray-100 font-sans flex flex-col">
       {/* 1. TOP NAV BAR - Mobilanpassad */}
-      <nav className="bg-gray-950 border-b border-gray-200 px-4 md:px-6 py-4 flex flex-col sm:flex-row justify-between items-center gap-4 shadow-xs">
+      <nav className="bg-gray-900 border-b border-gray-800 px-4 py-4 flex flex-col sm:flex-row justify-between items-center gap-4 shadow-md">
         <div className="flex items-center justify-between w-full sm:w-auto">
           <div className="p-2 bg-emerald-600 rounded-lg text-white font-black text-sm tracking-tight">
             HireFlow CareerHub
           </div>
         </div>
 
-        <div className="flex items-between gap-4">
-          <span className="text-xs font-bold text-gray-600 bg-gray-100 px-3 py-1.5 rounded-full truncate max-w-[150px]">
+        <div className="flex items-center justify-between w-full sm:w-auto border-t sm:border-t-0 pt-2 sm:pt-0 border-gray-800 sm:gap-4">
+          <span className="text-xs font-bold text-gray-600 bg-gray-100 px-3 py-1.5 rounded-full truncate max-w-[160px]">
             👤 {user?.username}
           </span>
           <button
             onClick={logout}
-            className="px-3 py-1.5 bg-red-600 hover:bg-red-900 text-white text-xs font-bold rounded-lg transition-all"
+            className="px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white text-xs font-bold rounded-lg ml-4 transition-colors"
           >
             Sign out
           </button>
@@ -90,9 +90,9 @@ const Dashboard = () => {
       </nav>
 
       {/* HUVUDINNEHÅLL */}
-      <main className="flex-1 flex flex-col lg:flex-row bg-gray-800 overflow-hidden w-full">
+      <main className="flex-1 flex flex-col lg:flex-row bg-gray-800 overflow-y-auto lg:overflow-hidden w-full">
         {/* VÄNSTERPANEL: JOBBLISTA */}
-        <div className="w-full lg:w-80 border-b lg:border-b-0 lg:border-r border-gray-800/60 bg-gray-900/20 p-4 flex flex-col shrink-0">
+        <div className="w-full lg:w-80 border-b lg:border-b-0 lg:border-r border-gray-800/60 bg-gray-900/10 p-4 flex flex-col shrink-0">
           <div className="flex justify-between items-center mb-4">
             <div>
               <h2 className="text-sm font-black uppercase tracking-wider text-gray-400">
@@ -213,7 +213,7 @@ const Dashboard = () => {
                   <div className="space-y-2">
                     {getCandidatesForStage(selectedJob._id, "hired").length ===
                     0 ? (
-                      <div className="bg-gray-900/20 border border-gray-800/60 rounded-xl p-4 text-center border-dashed text-[11px] text-gray-600">
+                      <div className="bg-white/70 border border-gray-800/60 rounded-xl p-4 text-center border-dashed text-[11px] text-gray-600">
                         No candidates hired yet
                       </div>
                     ) : (

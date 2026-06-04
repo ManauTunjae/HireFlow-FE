@@ -67,24 +67,30 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-950 text-gray-100 font-sans flex flex-col md:flex-row">
-      {/* SIDOMENY */}
-      <aside className="w-full md:w-16 bg-gray-900 border-b md:border-b-0 md:border-r border-gray-800/60 flex flex-row md:flex-col items-center justify-between md:justify-start md:py-6 p-4 gap-6 z-20 shrink-0">
-        <div className="flex flex-row md:flex-col items-center gap-6">
-          <div className="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center font-black text-sm shadow-md shadow-indigo-600/20">
-            {user?.username?.substring(0, 2).toUpperCase() || "HR"}
+    <div className="min-h-screen bg-gray-900 text-gray-800 font-sans flex flex-col">
+      {/* 1. TOP NAV BAR - Mobilanpassad */}
+      <nav className="bg-gray-950 border-b border-gray-200 px-4 md:px-6 py-4 flex flex-col sm:flex-row justify-between items-center gap-4 shadow-xs">
+        <div className="flex items-center justify-between w-full sm:w-auto">
+          <div className="p-2 bg-emerald-600 rounded-lg text-white font-black text-sm tracking-tight">
+            HireFlow CareerHub
           </div>
         </div>
-        <button
-          onClick={logout}
-          className="px-3 py-1.5 bg-red-600 hover:bg-red-900 text-white text-xs font-bold rounded-lg transition-all"
-        >
-          Sign out
-        </button>
-      </aside>
+
+        <div className="flex items-between gap-4">
+          <span className="text-xs font-bold text-gray-600 bg-gray-100 px-3 py-1.5 rounded-full truncate max-w-[150px]">
+            👤 {user?.username}
+          </span>
+          <button
+            onClick={logout}
+            className="px-3 py-1.5 bg-red-600 hover:bg-red-900 text-white text-xs font-bold rounded-lg transition-all"
+          >
+            Sign out
+          </button>
+        </div>
+      </nav>
 
       {/* HUVUDINNEHÅLL */}
-      <main className="flex-1 flex flex-col lg:flex-row overflow-hidden w-full">
+      <main className="flex-1 flex flex-col lg:flex-row bg-gray-800 overflow-hidden w-full">
         {/* VÄNSTERPANEL: JOBBLISTA */}
         <div className="w-full lg:w-80 border-b lg:border-b-0 lg:border-r border-gray-800/60 bg-gray-900/20 p-4 flex flex-col shrink-0">
           <div className="flex justify-between items-center mb-4">

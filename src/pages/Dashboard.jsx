@@ -5,105 +5,131 @@ import api from "../api/axiosInstance";
 const Dashboard = () => {
   const { user, logout } = useContext(AuthContext);
   const [jobs, setJobs] = useState([]);
+  const [allCandidates, setAllCandidates] = useState([]); // Ny stat: Håller alla HR:s kandidater
   const [selectedJob, setSelectedJob] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // 1. Hämta HR:s egna jobbannonser från din backend-rutt
+  // 1. Hämta ENDAST inloggade HR:s egna jobb och kandidater parallellt
   useEffect(() => {
-    const fetchHRJobs = async () => {
+    const fetchHRData = async () => {
       try {
-        const response = await api.get("api/jobs/my-jobs");
-        const jobsArray = Array.isArray(response.data)
-          ? response.data
-          : response.data?.data || [];
+        const [jobsRes, candidatesRes] = await Promise.all([
+          api.get("api/jobs/my-jobs"),
+          api.get("api/candidates"), // Hämtar säkra kandidater via din backend-filter! 🔒
+        ]);
 
+        // Packa upp jobbannonser
+        const jobsArray = Array.isArray(jobsRes.data)
+          ? jobsRes.data
+          : jobsRes.data?.data || [];
         setJobs(jobsArray);
 
-        // Välj det första jobbet automatiskt om det finns
+        // Packa upp kandidater
+        const candidatesArray = Array.isArray(candidatesRes.data)
+          ? candidatesRes.data
+          : candidatesRes.data?.data || [];
+        setAllCandidates(candidatesArray);
+
+        // Välj det första jobbet automatiskt om inget är valt än
         if (jobsArray.length > 0 && !selectedJob) {
           setSelectedJob(jobsArray[0]);
         }
         setLoading(false);
       } catch (error) {
-        console.error("Error fetching HR jobs:", error);
+        console.error("Error fetching HR dashboard data:", error);
         setLoading(false);
       }
     };
 
     if (user) {
-      fetchHRJobs();
+      fetchHRData();
     }
   }, [user]);
 
+  // Hjälpfunktion: Räknar hur många kandidater som sökt ett specifikt jobId
+  const getCandidateCountForJob = (jobId) => {
+    return allCandidates.filter((cand) => {
+      // Hanterar om jobId är ett objekt (.populatat) eller bara en ID-sträng
+      const candJobId = cand.jobId?._id || cand.jobId;
+      return candJobId === jobId;
+    }).length;
+  };
+
+  // Hjälpfunktion: Hämtar kandidater för det valda jobbet i ett specifikt status-steg
+  const getCandidatesForStage = (jobId, stage) => {
+    return allCandidates.filter((cand) => {
+      const candJobId = cand.jobId?._id || cand.jobId;
+      return (
+        candJobId === jobId &&
+        cand.status?.toLowerCase() === stage.toLowerCase()
+      );
+    });
+  };
+
   return (
-    <div className="min-h-screen bg-gray-950 text-gray-100 font-sans flex flex-col md:flex-row">
-      {/* =========================================================
-          SLIMMAD SIDOMENY - Mobilvänlig bar högst upp / Stående på dator
-         ========================================================= */}
-      <aside className="w-full md:w-16 bg-gray-900 border-b md:border-b-0 md:border-r border-gray-800/60 flex flex-row md:flex-col items-center justify-between md:justify-start md:py-6 p-4 gap-6 z-20 shrink-0">
-        <div className="flex flex-row md:flex-col items-center gap-6">
-          {/* HR Logotyp/Initialer */}
-          <div className="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center font-black text-sm shadow-md shadow-indigo-600/20">
-            {user?.username?.substring(0, 2).toUpperCase() || "HR"}
+    <div className="min-h-screen bg-gray-900 text-gray-100 font-sans flex flex-col">
+      {/* 1. TOP NAV BAR - Mobilanpassad */}
+      <nav className="bg-gray-900 border-b border-gray-800 px-4 py-4 flex flex-col sm:flex-row justify-between items-center gap-4 shadow-md">
+        <div className="flex items-center justify-between w-full sm:w-auto">
+          <div className="p-2 bg-emerald-600 rounded-lg text-white font-black text-sm tracking-tight">
+            HireFlow CareerHub
           </div>
         </div>
 
-        {/* Sign Out - Alltid kvar längst ner/längst ut */}
-        <button
-          onClick={logout}
-          title="Sign out"
-          className="text-xs font-bold text-gray-400 hover:text-red-500 transition-all uppercase tracking-wider"
-        >
-          Log Out 🚪
-        </button>
-      </aside>
+        <div className="flex items-center justify-between w-full sm:w-auto border-t sm:border-t-0 pt-2 sm:pt-0 border-gray-800 sm:gap-4">
+          <span className="text-xs font-bold text-gray-600 bg-gray-100 px-3 py-1.5 rounded-full truncate max-w-[160px]">
+            👤 {user?.username}
+          </span>
+          <button
+            onClick={logout}
+            className="px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white text-xs font-bold rounded-lg ml-4 transition-colors"
+          >
+            Sign out
+          </button>
+        </div>
+      </nav>
 
-      {/* =========================================================
-          HUVUDINNEHÅLL - Stackar kolumnerna vertikalt på mobil
-         ========================================================= */}
-      <main className="bg-gray-50 flex-1 flex flex-col lg:flex-row overflow-hidden w-full p-2">
-        {/* VÄNSTERPANEL: JOBBLISTA & + NEW JOB KNAPP */}
-        <div className="w-full rounded-lg lg:w-80 border-b lg:border-b-0 lg:border-r border-gray-800/60 bg-blue-300/20 p-4 md:p-5 flex flex-col shrink-0">
+      {/* HUVUDINNEHÅLL */}
+      <main className="flex-1 flex flex-col lg:flex-row bg-gray-800 overflow-y-auto lg:overflow-hidden w-full">
+        {/* VÄNSTERPANEL: JOBBLISTA */}
+        <div className="w-full lg:w-80 border-b lg:border-b-0 lg:border-r border-gray-800/60 bg-gray-900/10 p-4 flex flex-col shrink-0">
           <div className="flex justify-between items-center mb-4">
             <div>
-              <h2 className="text-sm text-black font-bold uppercase tracking-wider text-gray-00">
+              <h2 className="text-sm font-black uppercase tracking-wider text-gray-400">
                 My Jobs
               </h2>
               <p className="text-[10px] text-gray-600 font-medium">
                 Manage listings ({jobs.length})
               </p>
             </div>
-
-            {/* + New Job Knapp (Bevarad och intakt!) ➕ */}
-            <button className="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold rounded-lg shadow-md shadow-indigo-600/10 transition-all">
+            <button className="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold rounded-lg transition-all">
               + New Job
             </button>
           </div>
 
           {loading ? (
             <div className="text-xs text-gray-500 animate-pulse py-4">
-              Loading your jobs...
+              Loading jobs...
             </div>
           ) : (
-            // Scrollbar i sidled på mobil om det behövs, eller stående lista
-            <div className="flex flex-row lg:flex-col gap-3 overflow-x-auto lg:overflow-x-visible lg:overflow-y-auto pb-2 lg:pb-0 whitespace-nowrap lg:whitespace-normal">
+            <div className="flex flex-row lg:flex-col gap-3 overflow-x-auto lg:overflow-x-visible lg:overflow-y-auto pb-2 lg:pb-0">
               {jobs.map((job) => (
                 <div
                   key={job._id}
                   onClick={() => setSelectedJob(job)}
                   className={`p-3.5 rounded-xl border text-left cursor-pointer transition-all min-w-[240px] lg:min-w-0 ${
                     selectedJob?._id === job._id
-                      ? "bg-gray-900 border-indigo-500/20 shadow-lg shadow-black/20"
-                      : "bg-gray-500/30 border-gray-800/20 hover:border-gray-700"
+                      ? "bg-gray-900 border-indigo-500/50 shadow-lg shadow-black/44"
+                      : "bg-gray-900/50 border-gray-800/80 hover:border-gray-700"
                   }`}
                 >
                   <div className="flex justify-between items-start gap-2">
                     <h3 className="font-bold text-xs text-white truncate">
                       {job.title}
                     </h3>
-                    {/* HÄR: Räknare för hur många som sökt jobbet! (Kopplas i nästa Trello-kort) */}
-                    <span className="text-[9px] font-bold px-1.5 py-0.5 bg-gray-800 text-gray-400 rounded-md shrink-0 border border-gray-700/50">
-                      0 Cand
+                    {/* HÄR: Nu räknas antalet kandidater live för detta specifika jobb! 🔥 */}
+                    <span className="text-[9px] font-bold px-1.5 py-0.5 bg-indigo-950/50 text-indigo-400 rounded-md shrink-0 border border-indigo-800/30">
+                      {getCandidateCountForJob(job._id)} Cand
                     </span>
                   </div>
                   <p className="text-[10px] text-gray-500 mt-1 truncate">
@@ -122,7 +148,6 @@ const Dashboard = () => {
         <div className="flex-1 p-4 md:p-6 overflow-y-auto w-full">
           {selectedJob ? (
             <div className="space-y-6">
-              {/* Jobb-header */}
               <div className="border-b border-gray-900 pb-4">
                 <h1 className="text-lg md:text-xl font-black text-white tracking-tight">
                   {selectedJob.title}
@@ -132,38 +157,92 @@ const Dashboard = () => {
                 </p>
               </div>
 
-              {/* KANBAN / KANDIDAT-STAGES */}
-              <div>
-                <div className="flex items-center gap-2 mb-3">
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-gray-400">
-                    New Applied
-                  </span>
-                  <span className="px-1.5 py-0.5 bg-gray-900 border border-gray-800 text-gray-400 rounded-md text-[9px] font-bold">
-                    0
-                  </span>
+              {/* KANBAN STAGES GRID */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {/* 1. APPLIED STAGE */}
+                <div>
+                  <div className="flex items-center gap-2 mb-3">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-gray-400">
+                      Applied
+                    </span>
+                    <span className="px-1.5 py-0.5 bg-gray-900 border border-gray-800 text-gray-400 rounded-md text-[9px] font-bold">
+                      {getCandidatesForStage(selectedJob._id, "applied").length}
+                    </span>
+                  </div>
+
+                  <div className="space-y-2">
+                    {getCandidatesForStage(selectedJob._id, "applied")
+                      .length === 0 ? (
+                      <div className="bg-gray-900/20 border border-gray-800/60 rounded-xl p-4 text-center border-dashed text-[11px] text-gray-600">
+                        No candidates applied yet
+                      </div>
+                    ) : (
+                      getCandidatesForStage(selectedJob._id, "applied").map(
+                        (cand) => (
+                          <div
+                            key={cand._id}
+                            className="bg-gray-900 border border-gray-800 rounded-xl p-3 shadow-xs"
+                          >
+                            <h4 className="font-bold text-xs text-white">
+                              {cand.name}
+                            </h4>
+                            <p className="text-[10px] text-gray-400 mt-0.5">
+                              {cand.email}
+                            </p>
+                            <p className="text-[10px] text-gray-500 mt-0.5">
+                              📞 {cand.phone}
+                            </p>
+                          </div>
+                        ),
+                      )
+                    )}
+                  </div>
                 </div>
 
-                {/* Kandidat-rutan (Här visas VEM som har sökt!) */}
-                <div className="bg-gray-900/40 border border-gray-800/80 rounded-xl p-6 text-center border-dashed">
-                  <p className="text-xs text-gray-500 font-medium">
-                    No candidates in this stage yet
-                  </p>
-                  <p className="text-[10px] text-gray-600 mt-0.5">
-                    When users apply via CareerHub, they will land here live.
-                  </p>
+                {/* 2. HIRED STAGE */}
+                <div>
+                  <div className="flex items-center gap-2 mb-3">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-400">
+                      Hired
+                    </span>
+                    <span className="px-1.5 py-0.5 bg-emerald-950/30 border border-emerald-900/30 text-emerald-400 rounded-md text-[9px] font-bold">
+                      {getCandidatesForStage(selectedJob._id, "hired").length}
+                    </span>
+                  </div>
+
+                  <div className="space-y-2">
+                    {getCandidatesForStage(selectedJob._id, "hired").length ===
+                    0 ? (
+                      <div className="bg-white/70 border border-gray-800/60 rounded-xl p-4 text-center border-dashed text-[11px] text-gray-600">
+                        No candidates hired yet
+                      </div>
+                    ) : (
+                      getCandidatesForStage(selectedJob._id, "hired").map(
+                        (cand) => (
+                          <div
+                            key={cand._id}
+                            className="bg-gray-900 border border-emerald-900/20 rounded-xl p-3 shadow-xs"
+                          >
+                            <h4 className="font-bold text-xs text-emerald-400">
+                              {cand.name}
+                            </h4>
+                            <p className="text-[10px] text-gray-400 mt-0.5">
+                              {cand.email}
+                            </p>
+                            <span className="text-[9px] bg-emerald-950 text-emerald-400 px-1.5 py-0.5 rounded font-bold uppercase mt-2 inline-block">
+                              Selected 🎉
+                            </span>
+                          </div>
+                        ),
+                      )
+                    )}
+                  </div>
                 </div>
               </div>
             </div>
           ) : (
-            <div className="h-full flex items-center justify-center text-center p-8">
-              <div>
-                <p className="text-xs text-gray-500 font-medium">
-                  No job selected
-                </p>
-                <p className="text-[10px] text-gray-600 mt-0.5">
-                  Select a position from the left panel to review applicants.
-                </p>
-              </div>
+            <div className="h-full flex items-center justify-center text-center p-8 text-gray-600 text-xs">
+              Select a position to review applicants.
             </div>
           )}
         </div>

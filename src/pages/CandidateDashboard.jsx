@@ -103,22 +103,22 @@ const CandidateDashboard = () => {
   return (
     <div className="min-h-screen bg-gray-50 text-gray-800 font-sans flex flex-col">
       {/* 1. TOP NAV BAR - Mobilanpassad */}
-      <nav className="bg-white border-b border-gray-200 px-4 md:px-6 py-4 flex flex-col sm:flex-row justify-between items-center gap-4 shadow-xs">
+      <nav className="backdrop-blur-md border-b border-gray-200 px-4 md:px-6 py-4 flex flex-col sm:flex-row justify-between items-center gap-4 shadow-xs">
         <div className="flex items-center justify-between w-full sm:w-auto">
           <div className="p-2 bg-emerald-600 rounded-lg text-white font-black text-sm tracking-tight">
             HireFlow CareerHub
           </div>
         </div>
 
-        <div className="flex items-center gap-4">
-          <span className="text-xs font-bold text-gray-600 bg-gray-100 px-3 py-1.5 rounded-full truncate max-w-[150px]">
+        <div className="flex items-center justify-between w-full sm:w-auto border-t sm:border-t-0 pt-2 sm:pt-0 border-gray-800 sm:gap-4">
+          <span className="text-xs font-bold text-gray-600 bg-gray-100 px-3 py-1.5 rounded-full truncate max-w-[160px]">
             👤 {user?.username}
           </span>
           <button
             onClick={logout}
-            className="text-xs font-bold text-gray-400 hover:text-red-500 transition-all uppercase tracking-wider whitespace-nowrap"
+            className="px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white text-xs font-bold rounded-lg ml-4 transition-colors"
           >
-            Log Out 🚪
+            Sign out
           </button>
         </div>
       </nav>

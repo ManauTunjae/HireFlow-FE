@@ -42,18 +42,18 @@ const JobBoard = () => {
   });
 
   return (
-    <div className="min-h-screen bg-gray-50 text-gray-900 px-3.5">
+    <div class="min-h-screen bg-green-50 text-gray-900">
       {/* Login */}
-      <nav className="sticky top-0 bg-white/80 backdrop-blur-md border-b border-gray-200 px-6 py-4 z-40">
-        <div className="max-w-5xl mx-auto flex justify-between items-center">
-          <span className="text-xl font-black text-gray-950 tracking-tighter">
-            Hire<span className="text-indigo-600">Flow</span>
+      <nav className="sticky top-0 bg-green-900/70 backdrop-blur-md border-b border-gray-200 px-6 py-4 z-40">
+        <div className="max-w-auto mx-auto flex justify-between items-center">
+          <span className="text-2xl font-black text-gray-950 tracking-tighter">
+            Hire<span className="text-white">Flow</span>
           </span>
 
           {/* Login-button */}
           <button
             onClick={() => setIsAuthModalOpen(true)}
-            className="px-4 py-2 text-sm font-bold text-gray-700 hover:text-gray-950 border border-gray-200 hover:border-gray-900 rounded-xl bg-white shadow-sm transition-all"
+            className="px-4 py-2 text-sm font-bold text-gray-700 hover:text-gray-950 hover:bg-green-400 border border-gray-200 hover:border-white rounded-xl bg-white shadow-sm transition-all"
           >
             Sign In
           </button>
@@ -64,14 +64,14 @@ const JobBoard = () => {
           <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight text-gray-900 mb-4">
             Find your tech-job
           </h1>
-          <p className="text-lg text-gray-600 max-w-xl mx-auto">
+          <p className="text-lg text-gray-600 max-w-xl mx-auto p-4">
             Explore the latest tech job opportunities and connect with top
             companies. Your dream job is just a click away!
           </p>
         </div>
       </header>
 
-      <main className="max-w-5xl mx-auto px-3 py-12">
+      <main className="max-w-5xl mx-auto px-5 py-12">
         {/* search job */}
         <div className="mb-10">
           <AuthModal

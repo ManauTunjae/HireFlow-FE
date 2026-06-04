@@ -11,6 +11,34 @@ const Dashboard = () => {
 
   // 1. Hämta HR:s egna jobbannonser från din backend-rutt
   useEffect(() => {
+    const fetchHRData = async () => {
+      try {
+        const [jobsResponse, candidatesResponse] = await Promise.all([
+          api.get("api/jobs/my-jobs"),
+          api.get("api/candidates/my-applications"),
+        ]);
+
+        const jobsArray = Array.isArray(jobsResponse.data)
+          ? jobsResponse.data
+          : jobsResponse.data?.data || [];
+        setJobs(jobsArray);
+
+        const candidatesArray = Array.isArray(candidatesResponse.data)
+          ? candidatesResponse.data
+          : candidatesResponse.data?.data || [];
+        setAllCandidates(candidatesArray);
+
+        // Välj det första jobbet automatiskt om det finns
+        if (jobsArray.length > 0 && !selectedJob) {
+          setSelectedJob(jobsArray[0]);
+        }
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching HR data:", error);
+        setLoading(false);
+      }
+    }
+
     const fetchHRJobs = async () => {
       try {
         const response = await api.get("api/jobs/my-jobs");

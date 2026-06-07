@@ -10,7 +10,7 @@ const CandidateDashboard = () => {
   const [stats, setStats] = useState({
     total: 0,
     applied: 0,
-    interviewing: 0,
+    interview: 0,
     hired: 0,
   });
 
@@ -53,14 +53,14 @@ const CandidateDashboard = () => {
           (app) => app.status?.toLowerCase() === "applied"
         ).length;
         const interviewing = allApplications.filter(
-          (app) => app.status?.toLowerCase() === "interviewing"
+          (app) => app.status?.toLowerCase() === "interview"
         ).length;
         const hired = allApplications.filter(
           (app) => app.status?.toLowerCase() === "hired"
         ).length;
 
         // Här mappar vi nycklarna exakt mot dina stats!
-        setStats({ total, applied, interviewing, hired });
+        setStats({ total, applied, interview: interviewing, hired });
         setLoading(false);
       } catch (error) {
         console.error("Error fetching candidate dashboard data:", error);
@@ -157,12 +157,12 @@ const CandidateDashboard = () => {
               <div className="bg-white border border-gray-200 rounded-xl p-4 md:p-5 shadow-xs flex flex-col justify-between">
                 <div className="flex justify-between items-center text-gray-400">
                   <span className="text-[10px] md:text-xs font-bold uppercase tracking-wider truncate">
-                    Interviewing
+                    Interview
                   </span>
                   <span className="text-indigo-500 bg-indigo-50 p-1 md:p-1.5 rounded-md text-xs">📈</span>
                 </div>
                 <div className="text-2xl md:text-3xl font-black text-gray-900 mt-2 md:mt-4">
-                  {stats.interviewing}
+                  {stats.interview}
                 </div>
               </div>
 
@@ -221,13 +221,13 @@ const CandidateDashboard = () => {
                     <div className="flex justify-between text-xs font-semibold text-gray-600 mb-1">
                       <span>Interviewing 📈</span>
                       <span>
-                        {stats.total > 0 ? Math.round((stats.interviewing / stats.total) * 100) : 0}% ({stats.interviewing})
+                        {stats.total > 0 ? Math.round((stats.interview / stats.total) * 100) : 0}% ({stats.interview})
                       </span>
                     </div>
                     <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
                       <div
                         className="h-full bg-indigo-500 rounded-full transition-all duration-500"
-                        style={{ width: `${stats.total > 0 ? (stats.interviewing / stats.total) * 100 : 0}%` }}
+                        style={{ width: `${stats.total > 0 ? (stats.interview / stats.total) * 100 : 0}%` }}
                       ></div>
                     </div>
                   </div>

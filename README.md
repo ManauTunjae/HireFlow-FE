@@ -41,6 +41,7 @@ HireFlow är ett fullstack-baserat rekryteringssystem (Applicant Tracking System
 ## 🗺️ Databasstruktur (Mongoose Schemas)
 
 ### Candidate Schema
+```javascript
 {
   userRef: { type: ObjectId, ref: 'User', required: true },
   jobId: { type: ObjectId, ref: 'Job', required: true },
@@ -52,8 +53,10 @@ HireFlow är ett fullstack-baserat rekryteringssystem (Applicant Tracking System
   Github: { type: String }
 }
 candidateSchema.index({ email: 1, jobId: 1 }, { unique: true });
+```
 
 ### Job Schema
+```javascript
 {
   title: { type: String, required: true },
   description: { type: String, required: true },
@@ -64,7 +67,7 @@ candidateSchema.index({ email: 1, jobId: 1 }, { unique: true });
   salary: { type: String, required: true },
   requirements: [String]
 }
-
+```
 **Klona repositoriet**
 *   git clone https://github.com/ManauTunjae/HireFlow-FE.git
 *   cd HireFlow-FE

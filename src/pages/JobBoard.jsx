@@ -9,7 +9,7 @@ const JobBoard = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [isApplyModalOpen, setIsApplyModalOpen] = useState(false);
-  const [applyingjob, setApplyingJob] = useState(null);
+  const [applyingJob, setApplyingJob] = useState(null);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -18,7 +18,7 @@ const JobBoard = () => {
     github: "",
   });
   const [resume, setResume] = useState(null);
-  const [coverLetter, setCoverLetter] = useState("");
+  const [coverLetter, setCoverLetter] = useState(null);
   const [submitLoading, setSubmitLoading] = useState(false);
 
   useEffect(() => {
@@ -50,17 +50,22 @@ const JobBoard = () => {
 
     try {
       const uploadData = new FormData();
-      uploadData.append("jobId", applyingjob._id);
+
+      uploadData.append("jobId", applyingJob._id);
       uploadData.append("name", formData.name);
       uploadData.append("email", formData.email);
       uploadData.append("phone", formData.phone);
-      if (formData.linkedIn) uploadData.append("linkedIn", formData.linkedIn);
-      if (formData.github) uploadData.append("github", formData.github);
+
+      if (formData.linkedIn) uploadData.append("LinkedIn", formData.linkedIn);
+      if (formData.github) uploadData.append("Github", formData.github);
+
       if (resume) uploadData.append("resume", resume);
       if (coverLetter) uploadData.append("coverLetter", coverLetter);
-      const response = await api.post("/api/candidates", uploadData);
+      n;
+      const response = await api.post("api/candidates", uploadData);
       console.log("Application submitted successfully:", response.data);
-      alert("Your application has been submitted successfully!");
+
+      alert("Your application has been submitted successfully! 🎉");
       setIsApplyModalOpen(false);
       setFormData({
         name: "",
@@ -70,9 +75,12 @@ const JobBoard = () => {
         github: "",
       });
       setResume(null);
-      setCoverLetter("");
+      setCoverLetter(null);
     } catch (error) {
       console.error("Error submitting application:", error);
+      alert(
+        error.response?.data?.message || "Something went wrong when applying.",
+      );
     } finally {
       setSubmitLoading(false);
     }
@@ -88,7 +96,7 @@ const JobBoard = () => {
   });
 
   return (
-    <div class="min-h-screen bg-green-50 text-gray-900">
+    <div className="min-h-screen bg-green-50 text-gray-900">
       {/* Login */}
       <nav className="sticky top-0 bg-green-900/70 backdrop-blur-md border-b border-gray-200 px-6 py-4 z-40">
         <div className="max-w-auto mx-auto flex justify-between items-center">
@@ -96,7 +104,6 @@ const JobBoard = () => {
             Hire<span className="text-white">Flow</span>
           </span>
 
-          {/* Login-button */}
           <button
             onClick={() => setIsAuthModalOpen(true)}
             className="px-4 py-2 text-sm font-bold text-gray-700 hover:text-gray-950 hover:bg-green-400 border border-gray-200 hover:border-white rounded-xl bg-white shadow-sm transition-all"
@@ -105,6 +112,7 @@ const JobBoard = () => {
           </button>
         </div>
       </nav>
+
       <header className="bg-white border-b border-gray-200 py-16 text-center">
         <div className="max-w-3xl mx-auto">
           <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight text-gray-900 mb-4">
@@ -118,25 +126,22 @@ const JobBoard = () => {
       </header>
 
       <main className="max-w-5xl mx-auto px-5 py-12">
-        {/* search job */}
         <div className="mb-10">
           <AuthModal
             isOpen={isAuthModalOpen}
             onClose={() => setIsAuthModalOpen(false)}
           />
 
-          {/* HÄR KLISTRAR DU IN DIN NYA MODAL! 🔥 */}
-          {isApplyModalOpen && applyingjob && (
+          {isApplyModalOpen && applyingJob && (
             <div className="fixed inset-0 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 z-50 overflow-y-auto">
               <div className="bg-white rounded-2xl w-full max-w-lg p-6 shadow-xl space-y-4 my-8 animate-in fade-in zoom-in-95 duration-150">
-                {/* Header */}
                 <div className="flex justify-between items-start border-b border-gray-100 pb-3">
                   <div>
                     <h3 className="text-lg font-black text-gray-900 tracking-tight">
-                      Apply for {applyingjob.title}
+                      Apply for {applyingJob.title}
                     </h3>
                     <p className="text-xs text-gray-500">
-                      🏢 {applyingjob.company} • 📍 {applyingjob.location}
+                      🏢 {applyingJob.company} • 📍 {applyingJob.location}
                     </p>
                   </div>
                   <button
@@ -147,9 +152,10 @@ const JobBoard = () => {
                   </button>
                 </div>
 
-                {/* Form */}
-                <form className="space-y-4 text-xs font-semibold text-gray-700">
-                  {/* Full Name Input */}
+                <form
+                  className="space-y-4 text-xs font-semibold text-gray-700"
+                  onSubmit={handleApplySubmit}
+                >
                   <div>
                     <label className="block mb-1">Full Name *</label>
                     <input
@@ -164,7 +170,6 @@ const JobBoard = () => {
                     />
                   </div>
 
-                  {/* Contact Inputs Row */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                       <label className="block mb-1">Email Address *</label>
@@ -194,7 +199,6 @@ const JobBoard = () => {
                     </div>
                   </div>
 
-                  {/* Social Links Row */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 border-t border-gray-100 pt-3">
                     <div>
                       <label className="block mb-1 text-gray-500">
@@ -226,7 +230,6 @@ const JobBoard = () => {
                     </div>
                   </div>
 
-                  {/* File Uploads (CV & Cover Letter) */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 border-t border-gray-100 pt-3">
                     <div>
                       <label className="block mb-1 text-emerald-700">
@@ -236,7 +239,7 @@ const JobBoard = () => {
                         type="file"
                         required
                         accept=".pdf,.doc,.docx"
-                        onChange={(e) => setResume(e.target.files[0])} // Sparar filobjektet i ditt resume-state! 📄
+                        onChange={(e) => setResume(e.target.files[0])}
                         className="w-full text-xs text-gray-500 file:mr-3 file:py-1.5 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100 cursor-pointer transition-all"
                       />
                     </div>
@@ -247,13 +250,12 @@ const JobBoard = () => {
                       <input
                         type="file"
                         accept=".pdf,.doc,.docx"
-                        onChange={(e) => setCoverLetter(e.target.files[0])} // Sparar filobjektet i ditt coverLetter-state! 📄
+                        onChange={(e) => setCoverLetter(e.target.files[0])}
                         className="w-full text-xs text-gray-500 file:mr-3 file:py-1.5 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 cursor-pointer transition-all"
                       />
                     </div>
                   </div>
 
-                  {/* Action Buttons */}
                   <div className="flex justify-end gap-3 border-t border-gray-100 pt-4">
                     <button
                       type="button"
@@ -264,21 +266,25 @@ const JobBoard = () => {
                     </button>
                     <button
                       type="submit"
+                      disabled={submitLoading}
                       className="px-5 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-black rounded-xl shadow-md shadow-emerald-600/10 transition-all flex items-center gap-2"
                     >
-                      Submit Application
+                      {submitLoading
+                        ? "Uploading application... ⏳"
+                        : "Submit Application 💼"}
                     </button>
                   </div>
                 </form>
               </div>
             </div>
           )}
+
           <div className="max-w-md mx-auto text-md">
             <label
               htmlFor="search"
               className="block text-md font-semibold text-gray-700 mb-2"
             >
-              Search oppotunities
+              Search opportunities
             </label>
             <input
               id="search"
@@ -291,7 +297,6 @@ const JobBoard = () => {
           </div>
         </div>
 
-        {/* Job list */}
         <div className="text-2xl font-bold mb-6 text-gray-800">
           <h2 className="text-2xl font-bold mb-6 text-gray-800">
             {searchQuery ? "Search Results" : "Latest Jobs Listings"}

@@ -8,6 +8,8 @@ const JobBoard = () => {
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+  const [isApplyModalOpen, setIsApplyModalOpen] = useState(false);
+  const [applyingjob, setApplyingJob] = useState(null);
 
   useEffect(() => {
     const fetchJobs = async () => {

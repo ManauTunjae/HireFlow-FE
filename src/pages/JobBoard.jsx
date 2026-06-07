@@ -134,7 +134,14 @@ const JobBoard = () => {
           ) : (
             <div className="space-y-4">
               {filteredJobs.map((job) => (
-                <JobCard key={job._id || job.id} job={job} />
+                <JobCard
+                  key={job._id || job.id}
+                  job={job}
+                  onApply={() => {
+                    setApplyingJob(job);
+                    setIsApplyModalOpen(true);
+                  }}
+                />
               ))}
             </div>
           )}

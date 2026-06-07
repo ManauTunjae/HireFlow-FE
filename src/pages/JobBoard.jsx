@@ -10,6 +10,16 @@ const JobBoard = () => {
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [isApplyModalOpen, setIsApplyModalOpen] = useState(false);
   const [applyingjob, setApplyingJob] = useState(null);
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    linkedIn: "",
+    github: "",
+  });
+  const [resume, setResume] = useState(null);
+  const [coverLetter, setCoverLetter] = useState("");
+  const [submitLoading, setSubmitLoading] = useState(false);
 
   useEffect(() => {
     const fetchJobs = async () => {

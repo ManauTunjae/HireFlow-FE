@@ -199,7 +199,50 @@ const Dashboard = () => {
                   </div>
                 </div>
 
-                {/* 2. HIRED STAGE */}
+                {/* 2. INTERVIEWING STAGE */}
+                <div>
+                  <div className="flex items-center gap-2 mb-3">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-gray-400">
+                      Interviewing
+                    </span>
+                    <span className="px-1.5 py-0.5 bg-gray-900 border border-gray-800 text-gray-400 rounded-md text-[9px] font-bold">
+                      {
+                        getCandidatesForStage(selectedJob._id, "interview")
+                          .length
+                      }
+                    </span>
+                  </div>
+
+                  <div className="space-y-2">
+                    {getCandidatesForStage(selectedJob._id, "interview")
+                      .length === 0 ? (
+                      <div className="bg-gray-900/20 border border-gray-800/60 rounded-xl p-4 text-center border-dashed text-[11px] text-gray-600">
+                        No candidates interviewing yet
+                      </div>
+                    ) : (
+                      getCandidatesForStage(selectedJob._id, "interview").map(
+                        (cand) => (
+                          <div
+                            key={cand._id}
+                            className="bg-gray-900 border border-gray-800 rounded-xl p-3 shadow-xs"
+                          >
+                            <h4 className="font-bold text-xs text-white">
+                              {cand.name}
+                            </h4>
+                            <p className="text-[10px] text-gray-400 mt-0.5">
+                              {cand.email}
+                            </p>
+                            <p className="text-[10px] text-gray-500 mt-0.5">
+                              📞 {cand.phone}
+                            </p>
+                          </div>
+                        ),
+                      )
+                    )}
+                  </div>
+                </div>
+
+                {/* 3. HIRED STAGE */}
                 <div>
                   <div className="flex items-center gap-2 mb-3">
                     <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-400">

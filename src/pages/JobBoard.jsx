@@ -61,7 +61,7 @@ const JobBoard = () => {
 
       if (resume) uploadData.append("resume", resume);
       if (coverLetter) uploadData.append("coverLetter", coverLetter);
-      n;
+      
       const response = await api.post("api/candidates", uploadData);
       console.log("Application submitted successfully:", response.data);
 

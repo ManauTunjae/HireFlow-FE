@@ -1,7 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import api from "./../api/axiosInstance";
 import JobCard from "../components/JobCard";
 import AuthModal from "../components/AuthModal";
+import { AuthContext } from "../context/AuthContext";
 
 const JobBoard = () => {
   const [jobs, setJobs] = useState([]);

@@ -6,6 +6,8 @@ import AuthModal from "../components/AuthModal";
 import { AuthContext } from "../context/AuthContext";
 
 const JobBoard = () => {
+  const { user, logout } = useContext(AuthContext);
+  const navigate = useNavigate();
   const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");

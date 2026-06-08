@@ -1,4 +1,4 @@
-const JobCard = ({ job }) => {
+const JobCard = ({ job, onApply }) => {
   const { title, company, location, salary, description } = job;
 
   return (
@@ -29,7 +29,7 @@ const JobCard = ({ job }) => {
         )}
       </div>
       <div className="flex items-center mt-4 md:mt-0">
-        <button className="w-full md:w-auto px-5 py-2.5 bg-gray-950 text-white text-sm font-semibold rounded-lg hover:bg-gray-800 transition-colors">
+        <button onClick={onApply} className="w-full md:w-auto px-5 py-2.5 bg-gray-950 text-white text-sm font-semibold rounded-lg hover:bg-gray-800 transition-colors">
           Apply Now
         </button>
       </div>

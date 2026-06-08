@@ -108,7 +108,7 @@ const JobBoard = () => {
             Hire<span className="text-white">Flow</span>
           </span>
 
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2 sm:gap-4">
             {user ? (
               <>
                 <button
@@ -119,13 +119,13 @@ const JobBoard = () => {
                       navigate("/recruiter-dashboard");
                     }
                   }}
-                  className="px-4 py-2 text-sm font-bold text-white bg-green-800 hover:bg-white hover:text-green-900 rounded-xl transition-all"
+                  className="px-2.5 py-1.5 text-xs sm:px-4 sm:py-2 sm:text-sm font-bold text-white bg-green-800 hover:bg-white hover:text-green-900 rounded-xl transition-all whitespace-nowrap"
                 >
                   Dashboard
                 </button>
                 <button
                   onClick={() => logout(navigate)}
-                  className="px-4 py-2 text-sm font-bold text-white bg-red-800 hover:bg-white hover:text-red-700/80 rounded-xl transition-all"
+                  className="px-2.5 py-1.5 text-xs sm:px-4 sm:py-2 sm:text-sm font-bold text-white bg-red-800 hover:bg-white hover:text-red-700/80 rounded-xl transition-all whitespace-nowrap"
                 >
                   Sign Out
                 </button>
@@ -133,7 +133,7 @@ const JobBoard = () => {
             ) : (
               <button
                 onClick={() => setIsAuthModalOpen(true)}
-                className="px-4 py-2 text-sm font-bold text-gray-900 bg-white hover:bg-green-800 hover:text-white rounded-xl transition-all"
+                className="px-4 py-2 text-xs sm:px-4 sm:py-2 sm:text-sm font-bold text-gray-900 bg-white hover:bg-green-800 hover:text-white rounded-xl transition-all"
               >
                 Sign In
               </button>

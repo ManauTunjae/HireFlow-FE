@@ -10,6 +10,9 @@ const Dashboard = () => {
   const [allCandidates, setAllCandidates] = useState([]); // Ny stat: Håller alla HR:s kandidater
   const [selectedJob, setSelectedJob] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [formLoading, setFormLoading] = useState(false);
+  const [formError, setFormError] = useState("");
 
   // 1. Hämta ENDAST inloggade HR:s egna jobb och kandidater parallellt
   useEffect(() => {

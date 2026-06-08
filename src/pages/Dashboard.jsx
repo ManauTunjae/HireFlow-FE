@@ -1,5 +1,6 @@
 import { useContext, useState, useEffect } from "react";
 import { AuthContext } from "../context/AuthContext";
+import { Link } from "react-router-dom";
 import api from "../api/axiosInstance";
 
 const Dashboard = () => {
@@ -72,7 +73,7 @@ const Dashboard = () => {
       <nav className="bg-gray-900 border-b border-gray-800 px-4 py-4 flex flex-col sm:flex-row justify-between items-center gap-4 shadow-md">
         <div className="flex items-center justify-between w-full sm:w-auto">
           <div className="p-2 bg-emerald-600 rounded-lg text-white font-black text-sm tracking-tight">
-            HireFlow CareerHub
+            <Link to="/">HireFlow CareerHub</Link>
           </div>
         </div>
 

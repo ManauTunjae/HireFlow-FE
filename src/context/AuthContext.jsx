@@ -94,6 +94,9 @@ export const AuthProvider = ({ children }) => {
   const logout = (navigate) => {
     localStorage.removeItem("recruiter_token");
     localStorage.removeItem("recruiter_user");
+
+    delete api.defaults.headers.common["Authorization"];
+    
     setUser(null);
 
     if (navigate) {

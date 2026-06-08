@@ -3,7 +3,6 @@ import { AuthContext } from "../context/AuthContext";
 import { Link } from "react-router-dom";
 import api from "../api/axiosInstance";
 
-
 const Dashboard = () => {
   const { user, logout } = useContext(AuthContext);
   const [jobs, setJobs] = useState([]);

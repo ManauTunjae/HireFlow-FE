@@ -84,6 +84,8 @@ const Dashboard = () => {
       setJobs((prevJobs) => [createdJob, ...prevJobs]);
       setSelectedJob(createdJob);
       setIsModalOpen(false);
+
+      alert("Your job has been created successfully!");
     } catch (error) {
       console.error("Error creating job:", error);
       setFormError(

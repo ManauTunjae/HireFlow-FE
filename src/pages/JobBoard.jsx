@@ -65,7 +65,7 @@ const JobBoard = () => {
 
       if (resume) uploadData.append("resume", resume);
       if (coverLetter) uploadData.append("coverLetter", coverLetter);
-      
+
       const response = await api.post("api/candidates", uploadData);
       console.log("Application submitted successfully:", response.data);
 
@@ -108,12 +108,37 @@ const JobBoard = () => {
             Hire<span className="text-white">Flow</span>
           </span>
 
-          <button
-            onClick={() => setIsAuthModalOpen(true)}
-            className="px-4 py-2 text-sm font-bold text-gray-700 hover:text-gray-950 hover:bg-green-400 border border-gray-200 hover:border-white rounded-xl bg-white shadow-sm transition-all"
-          >
-            Sign In
-          </button>
+          <div className="flex items-center gap-4">
+            {user ? (
+              <>
+                <button
+                  onClick={() => {
+                    if (role === "candidate") {
+                      navigate("/candidate-dashboard");
+                    } else {
+                      navigate("/recruiter-dashboard");
+                    }
+                  }}
+                  className="px-4 py-2 text-sm font-bold text-white hover:bg-green-800 rounded-xl transition-all"
+                >
+                  Dashboard
+                </button>
+                <button
+                  onClick={() => logout(navigate)}
+                  className="px-4 py-2 text-sm font-bold text-red-100 hover:text-white bg-red-600/80 border border-gray-200 hover:border-white rounded-xl shadow-sm transition-all"
+                >
+                  Sign Out
+                </button>
+              </>
+            ) : (
+              <button
+                onClick={() => setIsAuthModalOpen(true)}
+                className="px-4 py-2 text-sm font-bold text-gray-700 hover:text-gray-950 hover:bg-green-400 border border-gray-200 hover:border-white rounded-xl bg-white shadow-sm transition-all"
+              >
+                Sign In
+              </button>
+            )}
+          </div>
         </div>
       </nav>
 

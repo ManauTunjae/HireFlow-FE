@@ -75,7 +75,11 @@ const Dashboard = () => {
     setFormLoading(true);
     setFormError("");
     try {
-      const response = await api.post("api/jobs", newJobData);
+      const jobDataWithStatus = {
+        ...newJobData,
+        status: "open",
+      };
+      const response = await api.post("api/jobs", jobDataWithStatus);
       const createdJob = response.data.data;
       setJobs((prevJobs) => [createdJob, ...prevJobs]);
       setSelectedJob(createdJob);

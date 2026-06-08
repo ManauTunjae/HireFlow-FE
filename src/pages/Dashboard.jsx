@@ -2,6 +2,7 @@ import { useContext, useState, useEffect } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { Link } from "react-router-dom";
 import api from "../api/axiosInstance";
+import JobFormModal from "../components/JobFormModal";
 
 const Dashboard = () => {
   const { user, logout } = useContext(AuthContext);

@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 
@@ -17,6 +17,18 @@ const AuthModal = ({ isOpen, onClose }) => {
     username: "",
     company: "",
   });
+
+  useEffect(() => {
+    if (!isOpen) {
+      setFormData({
+        email: "",
+        password: "",
+        username: "",
+        company: "",
+      });
+      setError("");
+    }
+  }, [isOpen]);
 
   if (!isOpen) return null;
 
@@ -37,7 +49,7 @@ const AuthModal = ({ isOpen, onClose }) => {
         if (result.success) {
           onClose();
           if (role === "candidate") {
-            navigate("/candidate-dashboard");
+            navigate("/");
           } else {
             navigate("/recruiter-dashboard");
           }
@@ -55,7 +67,7 @@ const AuthModal = ({ isOpen, onClose }) => {
         const savedUser = JSON.parse(localStorage.getItem("recruiter_user"));
 
         if (savedUser.role === "candidate") {
-          navigate("/candidate-dashboard");
+          navigate("/");
         } else {
           navigate("/recruiter-dashboard");
         }
@@ -63,7 +75,7 @@ const AuthModal = ({ isOpen, onClose }) => {
         setError(result.message || "Invalid credentials!");
       }
     } catch {
-      setError("Something wentwrong. Please try again.");
+      setError("Something went wrong. Please try again.");
     } finally {
       setLoading(false);
     }

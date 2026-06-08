@@ -71,6 +71,25 @@ const Dashboard = () => {
     });
   };
 
+  const handleCreateJob = async (newJobData) => {
+    setFormLoading(true);
+    setFormError("");
+    try {
+      const responnse = await api.post("api/jobs", newJobData);
+      const createdJob = response.data.data;
+      setJobs((prevJobs) => [createdJob, ...prevJobs]);
+      setSelectedJob(createdJob);
+      setIsModalOpen(false);
+    } catch (error) {
+      console.error("Error creating job:", error);
+      setFormError(
+        error.response?.data?.message || "Could not create job. Try again.",
+      );
+    } finally {
+      setFormLoading(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gray-900 text-gray-100 font-sans flex flex-col">
       {/* 1. TOP NAV BAR - Mobilanpassad */}

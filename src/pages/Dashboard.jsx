@@ -126,7 +126,9 @@ const Dashboard = () => {
                 Manage listings ({jobs.length})
               </p>
             </div>
-            <button className="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold rounded-lg transition-all">
+            <button 
+              onClick={() => setIsModalOpen(true)}
+              className="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold rounded-lg transition-all">
               + New Job
             </button>
           </div>

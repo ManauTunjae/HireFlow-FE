@@ -2,6 +2,7 @@ import { useContext, useState, useEffect } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { Link } from "react-router-dom";
 import api from "../api/axiosInstance";
+import JobFormModal from "../components/JobFormModal";
 
 const Dashboard = () => {
   const { user, logout } = useContext(AuthContext);
@@ -9,6 +10,9 @@ const Dashboard = () => {
   const [allCandidates, setAllCandidates] = useState([]); // Ny stat: Håller alla HR:s kandidater
   const [selectedJob, setSelectedJob] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [formLoading, setFormLoading] = useState(false);
+  const [formError, setFormError] = useState("");
 
   // 1. Hämta ENDAST inloggade HR:s egna jobb och kandidater parallellt
   useEffect(() => {
@@ -67,6 +71,29 @@ const Dashboard = () => {
     });
   };
 
+  const handleCreateJob = async (newJobData) => {
+    setFormLoading(true);
+    setFormError("");
+    try {
+      const jobDataWithStatus = {
+        ...newJobData,
+        status: "open",
+      };
+      const response = await api.post("api/jobs", jobDataWithStatus);
+      const createdJob = response.data.data;
+      setJobs((prevJobs) => [createdJob, ...prevJobs]);
+      setSelectedJob(createdJob);
+      setIsModalOpen(false);
+    } catch (error) {
+      console.error("Error creating job:", error);
+      setFormError(
+        error.response?.data?.message || "Could not create job. Try again.",
+      );
+    } finally {
+      setFormLoading(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gray-900 text-gray-100 font-sans flex flex-col">
       {/* 1. TOP NAV BAR - Mobilanpassad */}
@@ -103,7 +130,10 @@ const Dashboard = () => {
                 Manage listings ({jobs.length})
               </p>
             </div>
-            <button className="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold rounded-lg transition-all">
+            <button
+              onClick={() => setIsModalOpen(true)}
+              className="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold rounded-lg transition-all"
+            >
               + New Job
             </button>
           </div>
@@ -290,6 +320,13 @@ const Dashboard = () => {
             </div>
           )}
         </div>
+        <JobFormModal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          onSubmit={handleCreateJob}
+          formLoading={formLoading}
+          formError={formError}
+        />
       </main>
     </div>
   );

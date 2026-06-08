@@ -1,11 +1,13 @@
 import { useContext, useState, useEffect } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import api from "../api/axiosInstance";
 import JobFormModal from "../components/JobFormModal";
 
 const Dashboard = () => {
   const { user, logout } = useContext(AuthContext);
+  const navigate = useNavigate();
   const [jobs, setJobs] = useState([]);
   const [allCandidates, setAllCandidates] = useState([]); // Ny stat: Håller alla HR:s kandidater
   const [selectedJob, setSelectedJob] = useState(null);
@@ -111,7 +113,7 @@ const Dashboard = () => {
             👤 {user?.username}
           </span>
           <button
-            onClick={logout}
+            onClick={() => logout(navigate)}
             className="px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white text-xs font-bold rounded-lg ml-4 transition-colors"
           >
             Sign out

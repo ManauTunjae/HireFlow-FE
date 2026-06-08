@@ -1,10 +1,12 @@
 import { useContext, useState, useEffect } from "react";
 import { AuthContext } from "../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import api from "../api/axiosInstance";
 
 const CandidateDashboard = () => {
   const { user, logout } = useContext(AuthContext);
+  const navigate = useNavigate();
   const [myApplications, setMyApplications] = useState([]);
   const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -123,7 +125,7 @@ const CandidateDashboard = () => {
               Home
             </Link>
             <button
-              onClick={logout}
+              onClick={() => logout(navigate)}
               className="px-2 py-1 bg-red-600 hover:bg-red-700 text-white text-xs font-bold rounded-lg ml-4 transition-colors"
             >
               Sign out

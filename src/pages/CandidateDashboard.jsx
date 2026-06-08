@@ -1,5 +1,6 @@
 import { useContext, useState, useEffect } from "react";
 import { AuthContext } from "../context/AuthContext";
+import { Link } from "react-router-dom";
 import api from "../api/axiosInstance";
 
 const CandidateDashboard = () => {
@@ -50,13 +51,13 @@ const CandidateDashboard = () => {
         // Beräkna realtidsstatistik – Synkat exakt med dina Mongoose Enums! 🎯
         const total = allApplications.length;
         const applied = allApplications.filter(
-          (app) => app.status?.toLowerCase() === "applied"
+          (app) => app.status?.toLowerCase() === "applied",
         ).length;
         const interviewing = allApplications.filter(
-          (app) => app.status?.toLowerCase() === "interview"
+          (app) => app.status?.toLowerCase() === "interview",
         ).length;
         const hired = allApplications.filter(
-          (app) => app.status?.toLowerCase() === "hired"
+          (app) => app.status?.toLowerCase() === "hired",
         ).length;
 
         // Här mappar vi nycklarna exakt mot dina stats!
@@ -106,20 +107,28 @@ const CandidateDashboard = () => {
       <nav className="backdrop-blur-md border-b border-gray-200 px-4 md:px-6 py-4 flex flex-col sm:flex-row justify-between items-center gap-4 shadow-xs">
         <div className="flex items-center justify-between w-full sm:w-auto">
           <div className="p-2 bg-emerald-600 rounded-lg text-white font-black text-sm tracking-tight">
-            HireFlow CareerHub
+            <Link to="/">HireFlow CareerHub</Link>
           </div>
         </div>
 
-        <div className="flex items-center justify-between w-full sm:w-auto border-t sm:border-t-0 pt-2 sm:pt-0 border-gray-800 sm:gap-4">
+        <div className="flex items-center justify-between w-full sm:w-auto border-t sm:border-t-0 pt-2 sm:pt-0 border-gray-800">
           <span className="text-xs font-bold text-gray-600 bg-gray-100 px-3 py-1.5 rounded-full truncate max-w-[160px]">
             👤 {user?.username}
           </span>
-          <button
-            onClick={logout}
-            className="px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white text-xs font-bold rounded-lg ml-4 transition-colors"
-          >
-            Sign out
-          </button>
+          <div>
+            <Link
+              to="/"
+              className="px-2 py-1 bg-green-600 hover:bg-green-700 text-white text-xs font-bold rounded-lg ml-4 transition-colors inline-block"
+            >
+              Home
+            </Link>
+            <button
+              onClick={logout}
+              className="px-2 py-1 bg-red-600 hover:bg-red-700 text-white text-xs font-bold rounded-lg ml-4 transition-colors"
+            >
+              Sign out
+            </button>
+          </div>
         </div>
       </nav>
 
@@ -147,7 +156,9 @@ const CandidateDashboard = () => {
                   <span className="text-[10px] md:text-xs font-bold uppercase tracking-wider truncate">
                     Total Apps
                   </span>
-                  <span className="text-emerald-500 bg-emerald-50 p-1 md:p-1.5 rounded-md text-xs">📊</span>
+                  <span className="text-emerald-500 bg-emerald-50 p-1 md:p-1.5 rounded-md text-xs">
+                    📊
+                  </span>
                 </div>
                 <div className="text-2xl md:text-3xl font-black text-gray-900 mt-2 md:mt-4">
                   {stats.total}
@@ -159,7 +170,9 @@ const CandidateDashboard = () => {
                   <span className="text-[10px] md:text-xs font-bold uppercase tracking-wider truncate">
                     Interview
                   </span>
-                  <span className="text-indigo-500 bg-indigo-50 p-1 md:p-1.5 rounded-md text-xs">📈</span>
+                  <span className="text-indigo-500 bg-indigo-50 p-1 md:p-1.5 rounded-md text-xs">
+                    📈
+                  </span>
                 </div>
                 <div className="text-2xl md:text-3xl font-black text-gray-900 mt-2 md:mt-4">
                   {stats.interview}
@@ -171,7 +184,9 @@ const CandidateDashboard = () => {
                   <span className="text-[10px] md:text-xs font-bold uppercase tracking-wider truncate">
                     Applied
                   </span>
-                  <span className="text-amber-500 bg-amber-50 p-1 md:p-1.5 rounded-md text-xs">⏳</span>
+                  <span className="text-amber-500 bg-amber-50 p-1 md:p-1.5 rounded-md text-xs">
+                    ⏳
+                  </span>
                 </div>
                 <div className="text-2xl md:text-3xl font-black text-gray-900 mt-2 md:mt-4">
                   {stats.applied}
@@ -183,7 +198,9 @@ const CandidateDashboard = () => {
                   <span className="text-[10px] md:text-xs font-bold uppercase tracking-wider truncate">
                     Hired
                   </span>
-                  <span className="text-emerald-500 bg-emerald-50 p-1 md:p-1.5 rounded-md text-xs">✅</span>
+                  <span className="text-emerald-500 bg-emerald-50 p-1 md:p-1.5 rounded-md text-xs">
+                    ✅
+                  </span>
                 </div>
                 <div className="text-2xl md:text-3xl font-black text-emerald-600 mt-2 md:mt-4">
                   {stats.hired}
@@ -207,13 +224,18 @@ const CandidateDashboard = () => {
                     <div className="flex justify-between text-xs font-semibold text-gray-600 mb-1">
                       <span>Applied ⏳</span>
                       <span>
-                        {stats.total > 0 ? Math.round((stats.applied / stats.total) * 100) : 0}% ({stats.applied})
+                        {stats.total > 0
+                          ? Math.round((stats.applied / stats.total) * 100)
+                          : 0}
+                        % ({stats.applied})
                       </span>
                     </div>
                     <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
                       <div
                         className="h-full bg-amber-500 rounded-full transition-all duration-500"
-                        style={{ width: `${stats.total > 0 ? (stats.applied / stats.total) * 100 : 0}%` }}
+                        style={{
+                          width: `${stats.total > 0 ? (stats.applied / stats.total) * 100 : 0}%`,
+                        }}
                       ></div>
                     </div>
                   </div>
@@ -221,13 +243,18 @@ const CandidateDashboard = () => {
                     <div className="flex justify-between text-xs font-semibold text-gray-600 mb-1">
                       <span>Interviewing 📈</span>
                       <span>
-                        {stats.total > 0 ? Math.round((stats.interview / stats.total) * 100) : 0}% ({stats.interview})
+                        {stats.total > 0
+                          ? Math.round((stats.interview / stats.total) * 100)
+                          : 0}
+                        % ({stats.interview})
                       </span>
                     </div>
                     <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
                       <div
                         className="h-full bg-indigo-500 rounded-full transition-all duration-500"
-                        style={{ width: `${stats.total > 0 ? (stats.interview / stats.total) * 100 : 0}%` }}
+                        style={{
+                          width: `${stats.total > 0 ? (stats.interview / stats.total) * 100 : 0}%`,
+                        }}
                       ></div>
                     </div>
                   </div>
@@ -235,13 +262,18 @@ const CandidateDashboard = () => {
                     <div className="flex justify-between text-xs font-semibold text-gray-600 mb-1">
                       <span>Hired ✅</span>
                       <span>
-                        {stats.total > 0 ? Math.round((stats.hired / stats.total) * 100) : 0}% ({stats.hired})
+                        {stats.total > 0
+                          ? Math.round((stats.hired / stats.total) * 100)
+                          : 0}
+                        % ({stats.hired})
                       </span>
                     </div>
                     <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
                       <div
                         className="h-full bg-emerald-500 rounded-full transition-all duration-500"
-                        style={{ width: `${stats.total > 0 ? (stats.hired / stats.total) * 100 : 0}%` }}
+                        style={{
+                          width: `${stats.total > 0 ? (stats.hired / stats.total) * 100 : 0}%`,
+                        }}
                       ></div>
                     </div>
                   </div>
@@ -261,16 +293,31 @@ const CandidateDashboard = () => {
                   <div className="absolute left-0 right-0 bottom-10 border-t border-gray-100/70 pointer-events-none"></div>
                   <div className="absolute left-0 right-0 bottom-20 border-t border-gray-100/70 pointer-events-none"></div>
                   <div className="flex flex-col items-center gap-1 w-10 z-10">
-                    <div className="w-full bg-gray-200 rounded-t-sm" style={{ height: "15px" }}></div>
-                    <span className="text-[9px] font-bold text-gray-400">May</span>
+                    <div
+                      className="w-full bg-gray-200 rounded-t-sm"
+                      style={{ height: "15px" }}
+                    ></div>
+                    <span className="text-[9px] font-bold text-gray-400">
+                      May
+                    </span>
                   </div>
                   <div className="flex flex-col items-center gap-1 w-10 z-10">
-                    <div className="w-full bg-emerald-500 rounded-t-sm shadow-xs" style={{ height: `${Math.min(stats.total * 25, 95)}px` }}></div>
-                    <span className="text-[9px] font-bold text-emerald-600">June</span>
+                    <div
+                      className="w-full bg-emerald-500 rounded-t-sm shadow-xs"
+                      style={{ height: `${Math.min(stats.total * 25, 95)}px` }}
+                    ></div>
+                    <span className="text-[9px] font-bold text-emerald-600">
+                      June
+                    </span>
                   </div>
                   <div className="flex flex-col items-center gap-1 w-10 z-10">
-                    <div className="w-full bg-gray-100 rounded-t-sm" style={{ height: "4px" }}></div>
-                    <span className="text-[9px] font-bold text-gray-300">Jul</span>
+                    <div
+                      className="w-full bg-gray-100 rounded-t-sm"
+                      style={{ height: "4px" }}
+                    ></div>
+                    <span className="text-[9px] font-bold text-gray-300">
+                      Jul
+                    </span>
                   </div>
                 </div>
               </div>
@@ -289,7 +336,8 @@ const CandidateDashboard = () => {
 
               {myApplications.length === 0 ? (
                 <div className="p-10 text-center text-xs text-gray-400">
-                  📂 You haven't applied for any jobs yet. Get out there and apply!
+                  📂 You haven't applied for any jobs yet. Get out there and
+                  apply!
                 </div>
               ) : (
                 <div className="overflow-x-auto">
@@ -307,24 +355,36 @@ const CandidateDashboard = () => {
                       {myApplications.map((app) => {
                         const job = getJobDetails(app.jobId);
                         return (
-                          <tr key={app._id} className="hover:bg-gray-50/30 transition-colors">
+                          <tr
+                            key={app._id}
+                            className="hover:bg-gray-50/30 transition-colors"
+                          >
                             <td className="p-4 pl-5 font-bold text-gray-900">
                               {job.title}
                             </td>
                             <td className="p-4 text-gray-500">{job.company}</td>
                             <td className="p-4">
                               <span className="px-2 py-0.5 bg-gray-100 text-gray-600 rounded text-[10px]">
-                                📍 {job.location?.split(",")[0] /* Förkortar adresser på mobilen */}
+                                📍{" "}
+                                {
+                                  job.location?.split(
+                                    ",",
+                                  )[0] /* Förkortar adresser på mobilen */
+                                }
                               </span>
                             </td>
                             <td className="p-4 text-center">
-                              <span className={`px-2 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-wide ${getStatusStyle(app.status)}`}>
+                              <span
+                                className={`px-2 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-wide ${getStatusStyle(app.status)}`}
+                              >
                                 {app.status}
                               </span>
                             </td>
                             <td className="p-4 pr-5 text-right text-gray-400">
                               {app.createdAt
-                                ? new Date(app.createdAt).toLocaleDateString("sv-SE")
+                                ? new Date(app.createdAt).toLocaleDateString(
+                                    "sv-SE",
+                                  )
                                 : "N/A"}
                             </td>
                           </tr>

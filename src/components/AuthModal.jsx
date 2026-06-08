@@ -63,7 +63,7 @@ const AuthModal = ({ isOpen, onClose }) => {
         setError(result.message || "Invalid credentials!");
       }
     } catch {
-      setError("Something wentwrong. Please try again.");
+      setError("Something went wrong. Please try again.");
     } finally {
       setLoading(false);
     }

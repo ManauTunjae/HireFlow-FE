@@ -75,7 +75,7 @@ const Dashboard = () => {
     setFormLoading(true);
     setFormError("");
     try {
-      const responnse = await api.post("api/jobs", newJobData);
+      const response = await api.post("api/jobs", newJobData);
       const createdJob = response.data.data;
       setJobs((prevJobs) => [createdJob, ...prevJobs]);
       setSelectedJob(createdJob);
@@ -126,9 +126,10 @@ const Dashboard = () => {
                 Manage listings ({jobs.length})
               </p>
             </div>
-            <button 
+            <button
               onClick={() => setIsModalOpen(true)}
-              className="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold rounded-lg transition-all">
+              className="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold rounded-lg transition-all"
+            >
               + New Job
             </button>
           </div>
@@ -315,6 +316,13 @@ const Dashboard = () => {
             </div>
           )}
         </div>
+        <JobFormModal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          onSubmit={handleCreateJob}
+          formLoading={formLoading}
+          formError={formError}
+        />
       </main>
     </div>
   );

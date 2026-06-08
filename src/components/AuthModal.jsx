@@ -55,7 +55,7 @@ const AuthModal = ({ isOpen, onClose }) => {
         const savedUser = JSON.parse(localStorage.getItem("recruiter_user"));
 
         if (savedUser.role === "candidate") {
-          navigate("/candidate-dashboard");
+          navigate("/");
         } else {
           navigate("/recruiter-dashboard");
         }

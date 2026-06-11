@@ -74,25 +74,54 @@ const Dashboard = () => {
     });
   };
 
-  const handleCreateJob = async (newJobData) => {
+  // 🎯 STEG 3: Smart kombinations-funktion för att både skapa och redigera jobb live!
+  const handleCreateOrUpdateJob = async (jobData) => {
     setFormLoading(true);
     setFormError("");
     try {
-      const jobDataWithStatus = {
-        ...newJobData,
-        status: "open",
-      };
-      const response = await api.post("api/jobs", jobDataWithStatus);
-      const createdJob = response.data.data;
-      setJobs((prevJobs) => [createdJob, ...prevJobs]);
-      setSelectedJob(createdJob);
-      setIsModalOpen(false);
+      if (editingJob) {
+        // 🔄 REDIGERA BEFINTLIGT JOBB (PUT /api/jobs/:id)
+        const response = await api.put(`api/jobs/${editingJob._id}`, jobData);
 
-      alert("Your job has been created successfully!");
+        // Packa upp det uppdaterade jobbet från din backends response
+        const updatedJob = response.data.data;
+
+        // Uppdatera din lokala jobblista (state) live på skärmen direkt! 😍
+        setJobs((prevJobs) =>
+          prevJobs.map((job) =>
+            job._id === updatedJob._id ? updatedJob : job,
+          ),
+        );
+
+        // Om det här jobbet är det som är aktivt i Kanban-vyn just nu, uppdatera det med!
+        if (selectedJob?._id === updatedJob._id) {
+          setSelectedJob(updatedJob);
+        }
+
+        // Återställ edit-state efter lyckad sparning
+        setEditingJob(null);
+        alert("Job listing updated successfully! 🎉");
+      } else {
+        // 🆕 SKAPA NYTT JOBB (POST /api/jobs) - Din gamla fungerande kod
+        const jobDataWithStatus = {
+          ...jobData,
+          status: "open",
+        };
+        const response = await api.post("api/jobs", jobDataWithStatus);
+        const createdJob = response.data.data;
+
+        setJobs((prevJobs) => [createdJob, ...prevJobs]);
+        setSelectedJob(createdJob);
+        alert("Your job has been created successfully! 💼");
+      }
+
+      // Stäng modalen oavsett om vi skapade eller redigerade
+      setIsModalOpen(false);
     } catch (error) {
-      console.error("Error creating job:", error);
+      console.error("Error saving job:", error);
       setFormError(
-        error.response?.data?.message || "Could not create job. Try again.",
+        error.response?.data?.message ||
+          "Could not save job. Please try again.",
       );
     } finally {
       setFormLoading(false);
@@ -348,9 +377,7 @@ const Dashboard = () => {
             setIsModalOpen(false);
             setEditingJob(null);
           }}
-          setJobs={jobs}
-          onSubmit={handleCreateJob}
-          // onSubmit={handleCreateOrUpdateJob}
+          onSubmit={handleCreateOrUpdateJob}
           formLoading={formLoading}
           formError={formError}
           editingJob={editingJob}

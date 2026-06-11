@@ -20,10 +20,10 @@ const JobFormModal = ({
   });
 
   useEffect(() => {
-    if (!isOpen) {
+    if (isOpen) {
       if (editingJob) {
         setFormData({
-          title: editingJob.titile || "",
+          title: editingJob.title || "",
           company: editingJob.company || "",
           location: editingJob.location || "",
           salary: editingJob.salary || "",
@@ -44,7 +44,6 @@ const JobFormModal = ({
           status: "open",
         });
       }
-      [setError];
     }
   }, [isOpen, editingJob]);
 
@@ -121,6 +120,7 @@ const JobFormModal = ({
               >
                 <option value="open">🟢 Open (Visible to candidates)</option>
                 <option value="closed">🔴 Closed (Archive listing)</option>
+                <option value="draft">🟡 Draft (Archive listing)</option>
               </select>
             </div>
           </div>
@@ -133,7 +133,6 @@ const JobFormModal = ({
             </label>
             <input
               type="text"
-              required
               value={formData.title}
               onChange={(e) =>
                 setFormData({ ...formData, title: e.target.value })

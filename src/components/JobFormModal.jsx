@@ -6,6 +6,7 @@ const JobFormModal = ({
   onSubmit,
   formLoading,
   formError,
+  editingJob = null,
 }) => {
   const [error, setError] = useState("");
   const [formData, setFormData] = useState({
@@ -15,23 +16,37 @@ const JobFormModal = ({
     salary: "",
     description: "",
     requirements: "",
+    status: "open",
   });
 
   useEffect(() => {
     if (!isOpen) {
-      setFormData({
-        title: "",
-        company: "",
-        location: "",
-        salary: "",
-        description: "",
-        requirements: "",
-      });
-      setError("");
+      if (editingJob) {
+        setFormData({
+          title: editingJob.titile || "",
+          company: editingJob.company || "",
+          location: editingJob.location || "",
+          salary: editingJob.salary || "",
+          description: editingJob.description || "",
+          requirements: Array.isArray(editingJob.requirements)
+            ? editingJob.requirements.join(", ")
+            : editingJob.requirements || "",
+          status: editingJob.status || "open",
+        });
+      } else {
+        setFormData({
+          title: "",
+          company: "",
+          location: "",
+          salary: "",
+          description: "",
+          requirements: "",
+          status: "open",
+        });
+      }
+      [setError];
     }
-  }, [isOpen]);
-
-  if (!isOpen) return null;
+  }, [isOpen, editingJob]);
 
   if (!isOpen) return null;
 
@@ -58,7 +73,9 @@ const JobFormModal = ({
       <div className="bg-gray-900 border border-gray-800 w-full max-w-md rounded-2xl shadow-2xl overflow-hidden p-6 space-y-4">
         {/* Header */}
         <div className="flex justify-between items-center border-b border-gray-800 pb-3">
-          <h3 className="text-lg font-bold text-white">Create New Job</h3>
+          <h3 className="text-lg font-bold text-white">
+            {editingJob ? "✏️ Edit Job Listing" : "💼 Create New Job"}
+          </h3>
           <button
             onClick={onClose}
             className="text-gray-400 hover:text-white text-sm"
@@ -74,7 +91,41 @@ const JobFormModal = ({
           </div>
         )}
 
-        {/* Form */}
+        {/* 🎯 INFO-BANNER: Visar exakt vilket jobb som redigeras just nu! */}
+        {editingJob && (
+          <div className="bg-gray-950/60 border border-gray-800 p-3.5 rounded-xl space-y-3">
+            <div className="border-b border-gray-800/60 pb-2">
+              <span className="text-[9px] uppercase font-black tracking-wider text-yellow-500 bg-yellow-500/10 px-2 py-0.5 rounded-md">
+                You are editing:
+              </span>
+              {/* 🔄 RÄTTAT: Ändrat från 'jobs' till 'editingJob' så vi ser rätt data! */}
+              <h4 className="font-bold text-sm text-white mt-1 truncate">
+                {editingJob.title}
+              </h4>
+              <p className="text-[10px] text-gray-400 mt-0.5 truncate">
+                🏢 {editingJob.company} • 📍 {editingJob.location}
+              </p>
+            </div>
+
+            {/* STATUS-DROPDOWN: Ligger kvar här inuti bannern, snyggt och samlat */}
+            <div>
+              <label className="block text-[10px] font-bold uppercase tracking-wider text-gray-500 mb-1">
+                Job Status
+              </label>
+              <select
+                value={formData.status}
+                onChange={(e) =>
+                  setFormData({ ...formData, status: e.target.value })
+                }
+                className="w-auto bg-gray-900 border border-gray-800 rounded-lg px-3 py-2 text-xs font-semibold text-white focus:outline-none focus:ring-1 focus:ring-indigo-500 cursor-pointer"
+              >
+                <option value="open">🟢 Open (Visible to candidates)</option>
+                <option value="closed">🔴 Closed (Archive listing)</option>
+              </select>
+            </div>
+          </div>
+        )}
+
         <form onSubmit={handleLocalSubmit} className="space-y-4 text-sm">
           <div>
             <label className="block text-xs font-semibold text-gray-400 mb-1">
@@ -183,7 +234,11 @@ const JobFormModal = ({
               disabled={formLoading}
               className="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold rounded-lg transition-colors disabled:opacity-50"
             >
-              {formLoading ? "Creating..." : "Create Job"}
+              {formLoading
+                ? "Saving..."
+                : editingJob
+                  ? "Save Changes"
+                  : "Create Job"}
             </button>
           </div>
         </form>

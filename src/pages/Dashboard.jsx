@@ -344,10 +344,16 @@ const Dashboard = () => {
         </div>
         <JobFormModal
           isOpen={isModalOpen}
-          onClose={() => setIsModalOpen(false)}
+          onClose={() => {
+            setIsModalOpen(false);
+            setEditingJob(null);
+          }}
+          setJobs={jobs}
           onSubmit={handleCreateJob}
+          // onSubmit={handleCreateOrUpdateJob}
           formLoading={formLoading}
           formError={formError}
+          editingJob={editingJob}
         />
       </main>
     </div>

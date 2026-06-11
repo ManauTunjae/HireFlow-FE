@@ -130,7 +130,7 @@ const Dashboard = () => {
 
   const handleUpdateCandidateStatus = async (candidateId, newStatus) => {
     try {
-      await api.put(`api/candidates/${candidateId}`, { status: newStatus });
+      await api.patch(`api/candidates/${candidateId}`, { status: newStatus });
       setAllCandidates((prevCandidates) =>
         prevCandidates.map((cand) =>
           cand._id === candidateId ? { ...cand, status: newStatus } : cand,
@@ -314,6 +314,28 @@ const Dashboard = () => {
                             <p className="text-[10px] text-gray-500 mt-0.5">
                               📞 {cand.phone}
                             </p>
+                            <div className="border-t border-gray-800/60 pt-2 mt-1">
+                              <label className="block text-[10px] font-black uppercase tracking-wider text-gray-500 mb-1">
+                                Change Stage
+                              </label>
+                              <select
+                                value={cand.status?.toLowerCase()}
+                                onChange={(e) =>
+                                  handleUpdateCandidateStatus(
+                                    cand._id,
+                                    e.target.value,
+                                  )
+                                }
+                                className="w-auto bg-gray-950 border border-gray-800 rounded-md px-1 py-1 text-[13px] font-bold text-gray-200 focus:outline-none focus:ring-1 focus:ring-indigo-500 cursor-pointer"
+                              >
+                                <option value="applied">📋 Applied</option>
+                                <option value="interviewing">
+                                  🤝 Interviewing
+                                </option>
+                                <option value="hired">🎉 Hired</option>
+                                <option value="rejected">❌ Rejected</option>
+                              </select>
+                            </div>
                           </div>
                         ),
                       )
@@ -329,37 +351,60 @@ const Dashboard = () => {
                     </span>
                     <span className="px-1.5 py-0.5 bg-gray-900 border border-gray-800 text-gray-400 rounded-md text-[9px] font-bold">
                       {
-                        getCandidatesForStage(selectedJob._id, "interview")
+                        getCandidatesForStage(selectedJob._id, "interviewing")
                           .length
                       }
                     </span>
                   </div>
 
                   <div className="space-y-2">
-                    {getCandidatesForStage(selectedJob._id, "interview")
+                    {getCandidatesForStage(selectedJob._id, "interviewing")
                       .length === 0 ? (
                       <div className="bg-gray-900/20 border border-gray-800/60 rounded-xl p-4 text-center border-dashed text-[11px] text-gray-600">
                         No candidates interviewing yet
                       </div>
                     ) : (
-                      getCandidatesForStage(selectedJob._id, "interview").map(
-                        (cand) => (
-                          <div
-                            key={cand._id}
-                            className="bg-gray-900 border border-gray-800 rounded-xl p-3 shadow-xs"
-                          >
-                            <h4 className="font-bold text-xs text-white">
-                              {cand.name}
-                            </h4>
-                            <p className="text-[10px] text-gray-400 mt-0.5">
-                              {cand.email}
-                            </p>
-                            <p className="text-[10px] text-gray-500 mt-0.5">
-                              📞 {cand.phone}
-                            </p>
+                      getCandidatesForStage(
+                        selectedJob._id,
+                        "interviewing",
+                      ).map((cand) => (
+                        <div
+                          key={cand._id}
+                          className="bg-gray-900 border border-gray-800 rounded-xl p-3 shadow-xs"
+                        >
+                          <h4 className="font-bold text-xs text-white">
+                            {cand.name}
+                          </h4>
+                          <p className="text-[10px] text-gray-400 mt-0.5">
+                            {cand.email}
+                          </p>
+                          <p className="text-[10px] text-gray-500 mt-0.5">
+                            📞 {cand.phone}
+                          </p>
+                          <div className="border-t border-gray-800/60 pt-2 mt-1">
+                            <label className="block text-[10px] font-black uppercase tracking-wider text-gray-500 mb-1">
+                              Change Stage
+                            </label>
+                            <select
+                              value={cand.status?.toLowerCase()}
+                              onChange={(e) =>
+                                handleUpdateCandidateStatus(
+                                  cand._id,
+                                  e.target.value,
+                                )
+                              }
+                              className="w-auto bg-gray-950 border border-gray-800 rounded-md px-1 py-1 text-[13px] font-bold text-gray-200 focus:outline-none focus:ring-1 focus:ring-indigo-500 cursor-pointer"
+                            >
+                              <option value="applied">📋 Applied</option>
+                              <option value="interviewing">
+                                🤝 Interviewing
+                              </option>
+                              <option value="hired">🎉 Hired</option>
+                              <option value="rejected">❌ Rejected</option>
+                            </select>
                           </div>
-                        ),
-                      )
+                        </div>
+                      ))
                     )}
                   </div>
                 </div>
@@ -370,7 +415,7 @@ const Dashboard = () => {
                     <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-400">
                       Hired
                     </span>
-                    <span className="px-1.5 py-0.5 bg-emerald-950/30 border border-emerald-900/30 text-emerald-400 rounded-md text-[9px] font-bold">
+                    <span className="px-1.5 py-0.5 bg-emerald-950/30 border border-emerald-900/30 text-white rounded-md text-[9px] font-bold">
                       {getCandidatesForStage(selectedJob._id, "hired").length}
                     </span>
                   </div>
@@ -378,7 +423,7 @@ const Dashboard = () => {
                   <div className="space-y-2">
                     {getCandidatesForStage(selectedJob._id, "hired").length ===
                     0 ? (
-                      <div className="bg-white/70 border border-gray-800/60 rounded-xl p-4 text-center border-dashed text-[11px] text-gray-600">
+                      <div className="bg-white/70 border border-gray-800/60 rounded-xl p-4 text-center border-dashed text-[11px] text-white">
                         No candidates hired yet
                       </div>
                     ) : (
@@ -386,16 +431,59 @@ const Dashboard = () => {
                         (cand) => (
                           <div
                             key={cand._id}
-                            className="bg-gray-900 border border-emerald-900/20 rounded-xl p-3 shadow-xs"
+                            className="bg-green-900/70 border border-emerald-900/20 rounded-xl p-3 shadow-xs"
                           >
-                            <h4 className="font-bold text-xs text-emerald-400">
+                            <h4 className="font-bold text-xs text-white">
                               {cand.name}
                             </h4>
-                            <p className="text-[10px] text-gray-400 mt-0.5">
+                            <p className="text-[10px] text-gray-200 mt-0.5">
                               {cand.email}
                             </p>
-                            <span className="text-[9px] bg-emerald-950 text-emerald-400 px-1.5 py-0.5 rounded font-bold uppercase mt-2 inline-block">
+                            <span className="text-[10px] bg-white text-emerald-700 px-1.5 py-0.5 rounded font-bold uppercase mt-2 inline-block">
                               Selected 🎉
+                            </span>
+                          </div>
+                        ),
+                      )
+                    )}
+                  </div>
+                </div>
+
+                {/* 4. REJECTED STAGE */}
+                <div>
+                  <div className="flex items-center gap-2 mb-3">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-red-600">
+                      Rejected
+                    </span>
+                    <span className="px-1.5 py-0.5 bg-red-950 border border-red-900 text-white rounded-md text-[9px] font-bold">
+                      {
+                        getCandidatesForStage(selectedJob._id, "rejected")
+                          .length
+                      }
+                    </span>
+                  </div>
+
+                  <div className="space-y-2">
+                    {getCandidatesForStage(selectedJob._id, "rejected")
+                      .length === 0 ? (
+                      <div className="bg-white/70 border border-gray-800/60 rounded-xl p-4 text-center border-dashed text-[11px] text-white">
+                        No candidates rejected yet
+                      </div>
+                    ) : (
+                      getCandidatesForStage(selectedJob._id, "rejected").map(
+                        (cand) => (
+                          <div
+                            key={cand._id}
+                            className="bg-red-900/50 border border-red-900 rounded-xl p-3 shadow-xs"
+                          >
+                            <h4 className="font-bold text-xs text-white">
+                              {cand.name}
+                            </h4>
+                            <p className="text-[10px] text-white mt-0.5">
+                              {cand.email}
+                            </p>
+                            <span className="text-[10px] bg-white text-red-600 px-1.5 py-0.5 rounded font-bold uppercase mt-2 inline-block">
+                              rejected ❌
                             </span>
                           </div>
                         ),

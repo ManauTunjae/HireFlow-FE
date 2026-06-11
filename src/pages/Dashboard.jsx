@@ -15,6 +15,7 @@ const Dashboard = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [formLoading, setFormLoading] = useState(false);
   const [formError, setFormError] = useState("");
+  const [editingJob, setEditingJob] = useState(null);
 
   // 1. Hämta ENDAST inloggade HR:s egna jobb och kandidater parallellt
   useEffect(() => {
@@ -73,28 +74,71 @@ const Dashboard = () => {
     });
   };
 
-  const handleCreateJob = async (newJobData) => {
+  // 🎯 STEG 3: Smart kombinations-funktion för att både skapa och redigera jobb live!
+  const handleCreateOrUpdateJob = async (jobData) => {
     setFormLoading(true);
     setFormError("");
     try {
-      const jobDataWithStatus = {
-        ...newJobData,
-        status: "open",
-      };
-      const response = await api.post("api/jobs", jobDataWithStatus);
-      const createdJob = response.data.data;
-      setJobs((prevJobs) => [createdJob, ...prevJobs]);
-      setSelectedJob(createdJob);
-      setIsModalOpen(false);
+      if (editingJob) {
+        // 🔄 REDIGERA BEFINTLIGT JOBB (PUT /api/jobs/:id)
+        const response = await api.put(`api/jobs/${editingJob._id}`, jobData);
 
-      alert("Your job has been created successfully!");
+        // Packa upp det uppdaterade jobbet från din backends response
+        const updatedJob = response.data.data;
+
+        // Uppdatera din lokala jobblista (state) live på skärmen direkt! 😍
+        setJobs((prevJobs) =>
+          prevJobs.map((job) =>
+            job._id === updatedJob._id ? updatedJob : job,
+          ),
+        );
+
+        // Om det här jobbet är det som är aktivt i Kanban-vyn just nu, uppdatera det med!
+        if (selectedJob?._id === updatedJob._id) {
+          setSelectedJob(updatedJob);
+        }
+
+        // Återställ edit-state efter lyckad sparning
+        setEditingJob(null);
+        alert("Job listing updated successfully! 🎉");
+      } else {
+        // 🆕 SKAPA NYTT JOBB (POST /api/jobs) - Din gamla fungerande kod
+        const jobDataWithStatus = {
+          ...jobData,
+          status: "open",
+        };
+        const response = await api.post("api/jobs", jobDataWithStatus);
+        const createdJob = response.data.data;
+
+        setJobs((prevJobs) => [createdJob, ...prevJobs]);
+        setSelectedJob(createdJob);
+        alert("Your job has been created successfully! 💼");
+      }
+
+      // Stäng modalen oavsett om vi skapade eller redigerade
+      setIsModalOpen(false);
     } catch (error) {
-      console.error("Error creating job:", error);
+      console.error("Error saving job:", error);
       setFormError(
-        error.response?.data?.message || "Could not create job. Try again.",
+        error.response?.data?.message ||
+          "Could not save job. Please try again.",
       );
     } finally {
       setFormLoading(false);
+    }
+  };
+
+  const handleUpdateCandidateStatus = async (candidateId, newStatus) => {
+    try {
+      await api.patch(`api/candidates/${candidateId}`, { status: newStatus });
+      setAllCandidates((prevCandidates) =>
+        prevCandidates.map((cand) =>
+          cand._id === candidateId ? { ...cand, status: newStatus } : cand,
+        ),
+      );
+    } catch (error) {
+      console.error("Error updating candidate status:", error);
+      alert("Failed to update candidate status. Please try again.");
     }
   };
 
@@ -124,13 +168,13 @@ const Dashboard = () => {
       {/* HUVUDINNEHÅLL */}
       <main className="flex-1 flex flex-col lg:flex-row bg-gray-800 overflow-y-auto lg:overflow-hidden w-full">
         {/* VÄNSTERPANEL: JOBBLISTA */}
-        <div className="w-full lg:w-80 border-b lg:border-b-0 lg:border-r border-gray-800/60 bg-gray-900/10 p-4 flex flex-col shrink-0">
+        <div className="w-full lg:w-100 border-b lg:border-b-0 lg:border-r border-gray-800/60 bg-gray-900/10 p-4 flex flex-col shrink-0">
           <div className="flex justify-between items-center mb-4">
             <div>
               <h2 className="text-sm font-black uppercase tracking-wider text-gray-400">
                 My Jobs
               </h2>
-              <p className="text-[10px] text-gray-600 font-medium">
+              <p className="text-[12px] text-gray-600 font-medium">
                 Manage listings ({jobs.length})
               </p>
             </div>
@@ -152,18 +196,31 @@ const Dashboard = () => {
                 <div
                   key={job._id}
                   onClick={() => setSelectedJob(job)}
-                  className={`p-3.5 rounded-xl border text-left cursor-pointer transition-all min-w-[240px] lg:min-w-0 ${
+                  className={`p-3.5 rounded-xl border text-left cursor-pointer transition-all min-w-[240px] lg:min-w-0 group ${
                     selectedJob?._id === job._id
                       ? "bg-gray-900 border-indigo-500/50 shadow-lg shadow-black/44"
                       : "bg-gray-900/50 border-gray-800/80 hover:border-gray-700"
                   }`}
                 >
-                  <div className="flex justify-between items-start gap-2">
-                    <h3 className="font-bold text-xs text-white truncate">
-                      {job.title}
-                    </h3>
+                  <div className="flex justify-between items-start gap-3 w-full">
+                    <div className="flex items-center gap-2 min-w-0 flex-1">
+                      <h3 className="font-bold text-xs text-white truncate">
+                        {job.title}
+                      </h3>
+                      <span
+                        className={`text-[9px] font-black uppercase px-2 py-0.5 rounded-full border tracking-wide shrink-0 ${
+                          job.status === "open"
+                            ? "bg-green-950 text-green-400 border-green-900/30"
+                            : job.status === "draft"
+                              ? "bg-amber-950 text-amber-500 border-amber-900/30" // 🟡 Snygg mörk gul-orange (amber)
+                              : "bg-red-950 text-red-400 border-red-800/30"
+                        }`}
+                      >
+                        {job.status}
+                      </span>
+                    </div>
                     {/* HÄR: Nu räknas antalet kandidater live för detta specifika jobb! 🔥 */}
-                    <span className="text-[9px] font-bold px-1.5 py-0.5 bg-indigo-950/50 text-indigo-400 rounded-md shrink-0 border border-indigo-800/30">
+                    <span className="text-[12px] font-bold px-1.5 py-0.5 bg-indigo-950/50 text-indigo-400 rounded-md shrink-0 border border-indigo-800/30">
                       {getCandidateCountForJob(job._id)} Cand
                     </span>
                   </div>
@@ -173,6 +230,23 @@ const Dashboard = () => {
                   <p className="text-[9px] text-gray-600 mt-0.5 truncate">
                     📍 {job.location}
                   </p>
+                  <div className="mt-4">
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setEditingJob(job);
+                        setIsModalOpen(true);
+                      }}
+                      className={`text-[10px] uppercase font-bold rounded-md border border-gray-700 transition-all duration-200 ${
+                        selectedJob?._id === job._id
+                          ? "bg-gray-800 px-2 py-1 hover:bg-yellow-500 text-gray-300 hover:text-black shadow-lg shadow-black/44"
+                          : "bg-gray-800 px-1.5 py-1 text-gray-400 hover:bg-yellow-500 hover:text-black"
+                      }`}
+                      title="Edit Job"
+                    >
+                      edit
+                    </button>
+                  </div>
                 </div>
               ))}
             </div>
@@ -183,13 +257,26 @@ const Dashboard = () => {
         <div className="flex-1 p-4 md:p-6 overflow-y-auto w-full">
           {selectedJob ? (
             <div className="space-y-6">
-              <div className="border-b border-gray-900 pb-4">
-                <h1 className="text-lg md:text-xl font-black text-white tracking-tight">
-                  {selectedJob.title}
-                </h1>
-                <p className="text-[11px] text-gray-500 mt-1">
-                  🏢 {selectedJob.company} • 📍 {selectedJob.location}
-                </p>
+              <div className="border-b border-gray-900 pb-4 flex justify-between items-start gap-3 w-full">
+                <div>
+                  <h1 className="text-lg md:text-3xl font-black text-white tracking-tight">
+                    {selectedJob.title}
+                  </h1>
+                  <p className="text-[14px] text-gray-500 mt-1">
+                    🏢 {selectedJob.company} • 📍 {selectedJob.location}
+                  </p>
+                </div>
+                <span
+                  className={`text-[15px] font-black uppercase px-2 py-0.5 rounded-full border tracking-wide shrink-0 ${
+                    selectedJob.status === "open"
+                      ? "bg-green-950 text-green-400 border-green-900/30"
+                      : selectedJob.status === "draft"
+                        ? "bg-amber-950 text-amber-500 border-amber-900/30" // 🟡 Snygg mörk gul-orange (amber)
+                        : "bg-red-950 text-red-400 border-red-800/30"
+                  }`}
+                >
+                  {selectedJob.status || "open"}
+                </span>
               </div>
 
               {/* KANBAN STAGES GRID */}
@@ -227,6 +314,28 @@ const Dashboard = () => {
                             <p className="text-[10px] text-gray-500 mt-0.5">
                               📞 {cand.phone}
                             </p>
+                            <div className="border-t border-gray-800/60 pt-2 mt-1">
+                              <label className="block text-[10px] font-black uppercase tracking-wider text-gray-500 mb-1">
+                                Change Stage
+                              </label>
+                              <select
+                                value={cand.status?.toLowerCase()}
+                                onChange={(e) =>
+                                  handleUpdateCandidateStatus(
+                                    cand._id,
+                                    e.target.value,
+                                  )
+                                }
+                                className="w-auto bg-gray-950 border border-gray-800 rounded-md px-1 py-1 text-[13px] font-bold text-gray-200 focus:outline-none focus:ring-1 focus:ring-indigo-500 cursor-pointer"
+                              >
+                                <option value="applied">📋 Applied</option>
+                                <option value="interviewing">
+                                  🤝 Interviewing
+                                </option>
+                                <option value="hired">🎉 Hired</option>
+                                <option value="rejected">❌ Rejected</option>
+                              </select>
+                            </div>
                           </div>
                         ),
                       )
@@ -242,37 +351,60 @@ const Dashboard = () => {
                     </span>
                     <span className="px-1.5 py-0.5 bg-gray-900 border border-gray-800 text-gray-400 rounded-md text-[9px] font-bold">
                       {
-                        getCandidatesForStage(selectedJob._id, "interview")
+                        getCandidatesForStage(selectedJob._id, "interviewing")
                           .length
                       }
                     </span>
                   </div>
 
                   <div className="space-y-2">
-                    {getCandidatesForStage(selectedJob._id, "interview")
+                    {getCandidatesForStage(selectedJob._id, "interviewing")
                       .length === 0 ? (
                       <div className="bg-gray-900/20 border border-gray-800/60 rounded-xl p-4 text-center border-dashed text-[11px] text-gray-600">
                         No candidates interviewing yet
                       </div>
                     ) : (
-                      getCandidatesForStage(selectedJob._id, "interview").map(
-                        (cand) => (
-                          <div
-                            key={cand._id}
-                            className="bg-gray-900 border border-gray-800 rounded-xl p-3 shadow-xs"
-                          >
-                            <h4 className="font-bold text-xs text-white">
-                              {cand.name}
-                            </h4>
-                            <p className="text-[10px] text-gray-400 mt-0.5">
-                              {cand.email}
-                            </p>
-                            <p className="text-[10px] text-gray-500 mt-0.5">
-                              📞 {cand.phone}
-                            </p>
+                      getCandidatesForStage(
+                        selectedJob._id,
+                        "interviewing",
+                      ).map((cand) => (
+                        <div
+                          key={cand._id}
+                          className="bg-gray-900 border border-gray-800 rounded-xl p-3 shadow-xs"
+                        >
+                          <h4 className="font-bold text-xs text-white">
+                            {cand.name}
+                          </h4>
+                          <p className="text-[10px] text-gray-400 mt-0.5">
+                            {cand.email}
+                          </p>
+                          <p className="text-[10px] text-gray-500 mt-0.5">
+                            📞 {cand.phone}
+                          </p>
+                          <div className="border-t border-gray-800/60 pt-2 mt-1">
+                            <label className="block text-[10px] font-black uppercase tracking-wider text-gray-500 mb-1">
+                              Change Stage
+                            </label>
+                            <select
+                              value={cand.status?.toLowerCase()}
+                              onChange={(e) =>
+                                handleUpdateCandidateStatus(
+                                  cand._id,
+                                  e.target.value,
+                                )
+                              }
+                              className="w-auto bg-gray-950 border border-gray-800 rounded-md px-1 py-1 text-[13px] font-bold text-gray-200 focus:outline-none focus:ring-1 focus:ring-indigo-500 cursor-pointer"
+                            >
+                              <option value="applied">📋 Applied</option>
+                              <option value="interviewing">
+                                🤝 Interviewing
+                              </option>
+                              <option value="hired">🎉 Hired</option>
+                              <option value="rejected">❌ Rejected</option>
+                            </select>
                           </div>
-                        ),
-                      )
+                        </div>
+                      ))
                     )}
                   </div>
                 </div>
@@ -283,7 +415,7 @@ const Dashboard = () => {
                     <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-400">
                       Hired
                     </span>
-                    <span className="px-1.5 py-0.5 bg-emerald-950/30 border border-emerald-900/30 text-emerald-400 rounded-md text-[9px] font-bold">
+                    <span className="px-1.5 py-0.5 bg-emerald-950/30 border border-emerald-900/30 text-white rounded-md text-[9px] font-bold">
                       {getCandidatesForStage(selectedJob._id, "hired").length}
                     </span>
                   </div>
@@ -291,7 +423,7 @@ const Dashboard = () => {
                   <div className="space-y-2">
                     {getCandidatesForStage(selectedJob._id, "hired").length ===
                     0 ? (
-                      <div className="bg-white/70 border border-gray-800/60 rounded-xl p-4 text-center border-dashed text-[11px] text-gray-600">
+                      <div className="bg-white/70 border border-gray-800/60 rounded-xl p-4 text-center border-dashed text-[11px] text-white">
                         No candidates hired yet
                       </div>
                     ) : (
@@ -299,16 +431,59 @@ const Dashboard = () => {
                         (cand) => (
                           <div
                             key={cand._id}
-                            className="bg-gray-900 border border-emerald-900/20 rounded-xl p-3 shadow-xs"
+                            className="bg-green-900/70 border border-emerald-900/20 rounded-xl p-3 shadow-xs"
                           >
-                            <h4 className="font-bold text-xs text-emerald-400">
+                            <h4 className="font-bold text-xs text-white">
                               {cand.name}
                             </h4>
-                            <p className="text-[10px] text-gray-400 mt-0.5">
+                            <p className="text-[10px] text-gray-200 mt-0.5">
                               {cand.email}
                             </p>
-                            <span className="text-[9px] bg-emerald-950 text-emerald-400 px-1.5 py-0.5 rounded font-bold uppercase mt-2 inline-block">
+                            <span className="text-[10px] bg-white text-emerald-700 px-1.5 py-0.5 rounded font-bold uppercase mt-2 inline-block">
                               Selected 🎉
+                            </span>
+                          </div>
+                        ),
+                      )
+                    )}
+                  </div>
+                </div>
+
+                {/* 4. REJECTED STAGE */}
+                <div>
+                  <div className="flex items-center gap-2 mb-3">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-red-600">
+                      Rejected
+                    </span>
+                    <span className="px-1.5 py-0.5 bg-red-950 border border-red-900 text-white rounded-md text-[9px] font-bold">
+                      {
+                        getCandidatesForStage(selectedJob._id, "rejected")
+                          .length
+                      }
+                    </span>
+                  </div>
+
+                  <div className="space-y-2">
+                    {getCandidatesForStage(selectedJob._id, "rejected")
+                      .length === 0 ? (
+                      <div className="bg-white/70 border border-gray-800/60 rounded-xl p-4 text-center border-dashed text-[11px] text-white">
+                        No candidates rejected yet
+                      </div>
+                    ) : (
+                      getCandidatesForStage(selectedJob._id, "rejected").map(
+                        (cand) => (
+                          <div
+                            key={cand._id}
+                            className="bg-red-900/50 border border-red-900 rounded-xl p-3 shadow-xs"
+                          >
+                            <h4 className="font-bold text-xs text-white">
+                              {cand.name}
+                            </h4>
+                            <p className="text-[10px] text-white mt-0.5">
+                              {cand.email}
+                            </p>
+                            <span className="text-[10px] bg-white text-red-600 px-1.5 py-0.5 rounded font-bold uppercase mt-2 inline-block">
+                              rejected ❌
                             </span>
                           </div>
                         ),
@@ -326,10 +501,14 @@ const Dashboard = () => {
         </div>
         <JobFormModal
           isOpen={isModalOpen}
-          onClose={() => setIsModalOpen(false)}
-          onSubmit={handleCreateJob}
+          onClose={() => {
+            setIsModalOpen(false);
+            setEditingJob(null);
+          }}
+          onSubmit={handleCreateOrUpdateJob}
           formLoading={formLoading}
           formError={formError}
+          editingJob={editingJob}
         />
       </main>
     </div>

@@ -4,9 +4,22 @@ const JobCard = ({ job, onApply }) => {
   return (
     <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-shadow duration-200 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
       <div className="space-y-2">
-        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-50 text-indigo-700 border border-indigo-100">
-          New
-        </span>
+        <div className="space-x-3">
+          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-50 text-indigo-700 border border-indigo-100">
+            New
+          </span>
+          <span
+            className={`text-[10px] font-bold px-2 py-1 rounded-full uppercase tracking-wider ${
+              job.status === "open"
+                ? "bg-green-100 text-green-700 border border-green-200"
+                : job.status === "draft"
+                  ? "bg-yellow-100 text-yellow-700 border border-yellow-200"
+                  : "bg-red-100 text-red-700 border border-red-200"
+            }`}
+          >
+            {job.status || "open"}
+          </span>
+        </div>
         <h3 className="text-xl font-bold text-gray-900">{title}</h3>
 
         <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm text-gray-500 font-medium">
@@ -29,7 +42,10 @@ const JobCard = ({ job, onApply }) => {
         )}
       </div>
       <div className="flex items-center mt-4 md:mt-0">
-        <button onClick={onApply} className="w-full md:w-auto px-5 py-2.5 bg-gray-950 text-white text-sm font-semibold rounded-lg hover:bg-gray-800 transition-colors">
+        <button
+          onClick={onApply}
+          className="w-full md:w-auto px-5 py-2.5 bg-gray-950 text-white text-sm font-semibold rounded-lg hover:bg-gray-800 transition-colors"
+        >
           Apply Now
         </button>
       </div>

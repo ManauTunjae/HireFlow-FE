@@ -128,6 +128,20 @@ const Dashboard = () => {
     }
   };
 
+  const handleUpdateCandidateStatus = async (candidateId, newStatus) => {
+    try {
+      await api.put(`api/candidates/${candidateId}`, { status: newStatus });
+      setAllCandidates((prevCandidates) =>
+        prevCandidates.map((cand) =>
+          cand._id === candidateId ? { ...cand, status: newStatus } : cand,
+        ),
+      );
+    } catch (error) {
+      console.error("Error updating candidate status:", error);
+      alert("Failed to update candidate status. Please try again.");
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gray-900 text-gray-100 font-sans flex flex-col">
       {/* 1. TOP NAV BAR - Mobilanpassad */}

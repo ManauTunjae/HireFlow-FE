@@ -15,6 +15,7 @@ const Dashboard = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [formLoading, setFormLoading] = useState(false);
   const [formError, setFormError] = useState("");
+  const [editingJob, setEditingJob] = useState(null);
 
   // 1. Hämta ENDAST inloggade HR:s egna jobb och kandidater parallellt
   useEffect(() => {
@@ -173,6 +174,23 @@ const Dashboard = () => {
                   <p className="text-[9px] text-gray-600 mt-0.5 truncate">
                     📍 {job.location}
                   </p>
+                  <div className="mt-4">
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setEditingJob(job);
+                        setIsModalOpen(true);
+                      }}
+                      className={`text-[10px] uppercase font-bold rounded-md border border-gray-700 transition-all duration-200 ${
+                        selectedJob?._id === job._id
+                          ? "bg-gray-800 px-2 py-1 hover:bg-yellow-500 text-gray-300 hover:text-black shadow-lg shadow-black/44"
+                          : "bg-gray-800 px-1.5 py-1 text-gray-400 hover:bg-yellow-500 hover:text-black"
+                      }`}
+                      title="Edit Job"
+                    >
+                      edit
+                    </button>
+                  </div>
                 </div>
               ))}
             </div>

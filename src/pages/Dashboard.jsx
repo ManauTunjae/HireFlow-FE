@@ -154,13 +154,13 @@ const Dashboard = () => {
       {/* HUVUDINNEHÅLL */}
       <main className="flex-1 flex flex-col lg:flex-row bg-gray-800 overflow-y-auto lg:overflow-hidden w-full">
         {/* VÄNSTERPANEL: JOBBLISTA */}
-        <div className="w-full lg:w-80 border-b lg:border-b-0 lg:border-r border-gray-800/60 bg-gray-900/10 p-4 flex flex-col shrink-0">
+        <div className="w-full lg:w-100 border-b lg:border-b-0 lg:border-r border-gray-800/60 bg-gray-900/10 p-4 flex flex-col shrink-0">
           <div className="flex justify-between items-center mb-4">
             <div>
               <h2 className="text-sm font-black uppercase tracking-wider text-gray-400">
                 My Jobs
               </h2>
-              <p className="text-[10px] text-gray-600 font-medium">
+              <p className="text-[12px] text-gray-600 font-medium">
                 Manage listings ({jobs.length})
               </p>
             </div>
@@ -182,18 +182,31 @@ const Dashboard = () => {
                 <div
                   key={job._id}
                   onClick={() => setSelectedJob(job)}
-                  className={`p-3.5 rounded-xl border text-left cursor-pointer transition-all min-w-[240px] lg:min-w-0 ${
+                  className={`p-3.5 rounded-xl border text-left cursor-pointer transition-all min-w-[240px] lg:min-w-0 group ${
                     selectedJob?._id === job._id
                       ? "bg-gray-900 border-indigo-500/50 shadow-lg shadow-black/44"
                       : "bg-gray-900/50 border-gray-800/80 hover:border-gray-700"
                   }`}
                 >
-                  <div className="flex justify-between items-start gap-2">
-                    <h3 className="font-bold text-xs text-white truncate">
-                      {job.title}
-                    </h3>
+                  <div className="flex justify-between items-start gap-3 w-full">
+                    <div className="flex items-center gap-2 min-w-0 flex-1">
+                      <h3 className="font-bold text-xs text-white truncate">
+                        {job.title}
+                      </h3>
+                      <span
+                        className={`text-[9px] font-black uppercase px-2 py-0.5 rounded-full border tracking-wide shrink-0 ${
+                          job.status === "open"
+                            ? "bg-green-950 text-green-400 border-green-900/30"
+                            : job.status === "draft"
+                              ? "bg-amber-950 text-amber-500 border-amber-900/30" // 🟡 Snygg mörk gul-orange (amber)
+                              : "bg-red-950 text-red-400 border-red-800/30"
+                        }`}
+                      >
+                        {job.status}
+                      </span>
+                    </div>
                     {/* HÄR: Nu räknas antalet kandidater live för detta specifika jobb! 🔥 */}
-                    <span className="text-[9px] font-bold px-1.5 py-0.5 bg-indigo-950/50 text-indigo-400 rounded-md shrink-0 border border-indigo-800/30">
+                    <span className="text-[12px] font-bold px-1.5 py-0.5 bg-indigo-950/50 text-indigo-400 rounded-md shrink-0 border border-indigo-800/30">
                       {getCandidateCountForJob(job._id)} Cand
                     </span>
                   </div>
@@ -230,13 +243,26 @@ const Dashboard = () => {
         <div className="flex-1 p-4 md:p-6 overflow-y-auto w-full">
           {selectedJob ? (
             <div className="space-y-6">
-              <div className="border-b border-gray-900 pb-4">
-                <h1 className="text-lg md:text-xl font-black text-white tracking-tight">
-                  {selectedJob.title}
-                </h1>
-                <p className="text-[11px] text-gray-500 mt-1">
-                  🏢 {selectedJob.company} • 📍 {selectedJob.location}
-                </p>
+              <div className="border-b border-gray-900 pb-4 flex justify-between items-start gap-3 w-full">
+                <div>
+                  <h1 className="text-lg md:text-3xl font-black text-white tracking-tight">
+                    {selectedJob.title}
+                  </h1>
+                  <p className="text-[14px] text-gray-500 mt-1">
+                    🏢 {selectedJob.company} • 📍 {selectedJob.location}
+                  </p>
+                </div>
+                <span
+                  className={`text-[15px] font-black uppercase px-2 py-0.5 rounded-full border tracking-wide shrink-0 ${
+                    selectedJob.status === "open"
+                      ? "bg-green-950 text-green-400 border-green-900/30"
+                      : selectedJob.status === "draft"
+                        ? "bg-amber-950 text-amber-500 border-amber-900/30" // 🟡 Snygg mörk gul-orange (amber)
+                        : "bg-red-950 text-red-400 border-red-800/30"
+                  }`}
+                >
+                  {selectedJob.status || "open"}
+                </span>
               </div>
 
               {/* KANBAN STAGES GRID */}

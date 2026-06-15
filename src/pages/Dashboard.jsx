@@ -142,6 +142,28 @@ const Dashboard = () => {
     }
   };
 
+  const handleDeleteJob = async (jobId) => {
+    const confirmDelete = window.confirm(
+      `Are you sure to remove ${selectedJob.title}`,
+    );
+
+    if (!confirmDelete) return;
+
+    try {
+      await api.delete(`api/jobs/${jobId}`);
+      setJobs((prevJobs) => prevJobs.filter((job) => job._id !== jobId));
+      if (selectedJob?._id === jobId) {
+        setSelectedJob(null);
+      }
+      alert("The selected job has been removed!");
+    } catch (error) {
+      console.error("Error removing job:", error);
+      alert(
+        error.response?.data?.message || "Could not remove a job. Try again!",
+      );
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gray-900 text-gray-100 font-sans flex flex-col">
       {/* 1. TOP NAV BAR - Mobilanpassad */}
@@ -230,22 +252,33 @@ const Dashboard = () => {
                   <p className="text-[9px] text-gray-600 mt-0.5 truncate">
                     📍 {job.location}
                   </p>
-                  <div className="mt-4">
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setEditingJob(job);
-                        setIsModalOpen(true);
-                      }}
-                      className={`text-[10px] uppercase font-bold rounded-md border border-gray-700 transition-all duration-200 ${
-                        selectedJob?._id === job._id
-                          ? "bg-gray-800 px-2 py-1 hover:bg-yellow-500 text-gray-300 hover:text-black shadow-lg shadow-black/44"
-                          : "bg-gray-800 px-1.5 py-1 text-gray-400 hover:bg-yellow-500 hover:text-black"
-                      }`}
-                      title="Edit Job"
-                    >
-                      edit
-                    </button>
+                  <div className="mt-4 flex items-center gap-2 h-8">
+                    {selectedJob?._id === job._id && (
+                      <>
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation(); // Hindrar att kortet klickas och öppnas/stängs konstigt
+                            setEditingJob(job);
+                            setIsModalOpen(true);
+                          }}
+                          className="text-[10px] uppercase font-bold rounded-md border border-gray-700 bg-gray-800 px-2 py-1 text-yellow-300 hover:bg-yellow-500 hover:text-black transition-all duration-200"
+                          title="Edit Job"
+                        >
+                          Edit
+                        </button>
+
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleDeleteJob(job._id); // Eller din handleDeleteJob-funktion
+                          }}
+                          className="text-[10px] uppercase font-bold rounded-md border border-red-900/50 bg-red-950/40 px-2 py-1 text-red-400 hover:bg-red-600 hover:text-white transition-all duration-200"
+                          title="Delete Job"
+                        >
+                          Delete
+                        </button>
+                      </>
+                    )}
                   </div>
                 </div>
               ))}

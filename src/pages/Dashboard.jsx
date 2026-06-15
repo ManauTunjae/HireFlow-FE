@@ -144,18 +144,18 @@ const Dashboard = () => {
 
   const handleDeleteJob = async (jobId) => {
     const confirmDelete = window.confirm(
-      `Are you sure to remove ${jobs.title}`,
+      `Are you sure to remove ${selectedJob.title}`,
     );
 
     if (!confirmDelete) return;
 
     try {
-      await api.delete(`api/jos/${jobId}`);
+      await api.delete(`api/jobs/${jobId}`);
       setJobs((prevJobs) => prevJobs.filter((job) => job._id !== jobId));
       if (selectedJob?._id === jobId) {
         setSelectedJob(null);
       }
-      alert("The selected has been removed!");
+      alert("The selected job has been removed!");
     } catch (error) {
       console.error("Error removing job:", error);
       alert(
@@ -267,6 +267,13 @@ const Dashboard = () => {
                       title="Edit Job"
                     >
                       edit
+                    </button>
+                    <button
+                      onClick={() => handleDeleteJob(selectedJob._id)}
+                      className="text-[10px] uppercase font-bold rounded-md border border-red-900/50 bg-red-950/40 px-3 py-1.5 text-red-400 hover:bg-red-600 hover:text-white transition-all shadow-md shadow-black/20"
+                      title="Delete Job permanently"
+                    >
+                      🗑️ Delete
                     </button>
                   </div>
                 </div>

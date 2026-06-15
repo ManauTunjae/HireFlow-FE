@@ -9,8 +9,8 @@ export const AuthProvider = ({ children }) => {
 
   // Kontrollera om det finns en sparad användare när appen startar
   useEffect(() => {
-    const savedUser = localStorage.getItem("recruiter_user");
-    const token = localStorage.getItem("recruiter_token");
+    const savedUser = localStorage.getItem("hireflow_user");
+    const token = localStorage.getItem("hireflow_token");
 
     if (savedUser && token) {
       setUser(JSON.parse(savedUser));
@@ -42,8 +42,8 @@ export const AuthProvider = ({ children }) => {
         };
       }
 
-      localStorage.setItem("recruiter_token", token);
-      localStorage.setItem("recruiter_user", JSON.stringify(userData));
+      localStorage.setItem("hireflow_token", token);
+      localStorage.setItem("hireflow_user", JSON.stringify(userData));
 
       setUser(userData);
       return { success: true };
@@ -71,8 +71,8 @@ export const AuthProvider = ({ children }) => {
       }
 
       // Spara i localStorage så man slipper logga in igen vid refresh
-      localStorage.setItem("recruiter_token", token);
-      localStorage.setItem("recruiter_user", JSON.stringify(userData));
+      localStorage.setItem("hireflow_token", token);
+      localStorage.setItem("hireflow_user", JSON.stringify(userData));
 
       // Uppdatera axios headers och state
       api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
@@ -92,8 +92,8 @@ export const AuthProvider = ({ children }) => {
   };
 
   const logout = (navigate) => {
-    localStorage.removeItem("recruiter_token");
-    localStorage.removeItem("recruiter_user");
+    localStorage.removeItem("hireflow_token");
+    localStorage.removeItem("hireflow_user");
 
     delete api.defaults.headers.common["Authorization"];
     

@@ -142,6 +142,28 @@ const Dashboard = () => {
     }
   };
 
+  const handleDeleteJob = async (jobId) => {
+    const confirmDelete = window.confirm(
+      `Are you sure to remove ${jobs.title}`,
+    );
+
+    if (!confirmDelete) return;
+
+    try {
+      await api.delete(`api/jos/${jobId}`);
+      setJobs((prevJobs) => prevJobs.filter((job) => job._id !== jobId));
+      if (selectedJob?._id === jobId) {
+        setSelectedJob(null);
+      }
+      alert("The selected has been removed!");
+    } catch (error) {
+      console.error("Error removing job:", error);
+      alert(
+        error.response?.data?.message || "Could not remove a job. Try again!",
+      );
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gray-900 text-gray-100 font-sans flex flex-col">
       {/* 1. TOP NAV BAR - Mobilanpassad */}

@@ -252,29 +252,33 @@ const Dashboard = () => {
                   <p className="text-[9px] text-gray-600 mt-0.5 truncate">
                     📍 {job.location}
                   </p>
-                  <div className="mt-4">
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setEditingJob(job);
-                        setIsModalOpen(true);
-                      }}
-                      className={`text-[10px] uppercase font-bold rounded-md border border-gray-700 transition-all duration-200 ${
-                        selectedJob?._id === job._id
-                          ? "bg-gray-800 px-2 py-1 hover:bg-yellow-500 text-gray-300 hover:text-black shadow-lg shadow-black/44"
-                          : "bg-gray-800 px-1.5 py-1 text-gray-400 hover:bg-yellow-500 hover:text-black"
-                      }`}
-                      title="Edit Job"
-                    >
-                      edit
-                    </button>
-                    <button
-                      onClick={() => handleDeleteJob(selectedJob._id)}
-                      className="text-[10px] uppercase font-bold rounded-md border border-red-900/50 bg-red-950/40 px-3 py-1.5 text-red-400 hover:bg-red-600 hover:text-white transition-all shadow-md shadow-black/20"
-                      title="Delete Job permanently"
-                    >
-                      🗑️ Delete
-                    </button>
+                  <div className="mt-4 flex items-center gap-2 h-8">
+                    {selectedJob?._id === job._id && (
+                      <>
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation(); // Hindrar att kortet klickas och öppnas/stängs konstigt
+                            setEditingJob(job);
+                            setIsModalOpen(true);
+                          }}
+                          className="text-[10px] uppercase font-bold rounded-md border border-gray-700 bg-gray-800 px-2 py-1 text-yellow-300 hover:bg-yellow-500 hover:text-black transition-all duration-200"
+                          title="Edit Job"
+                        >
+                          Edit
+                        </button>
+
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleDeleteJob(job._id); // Eller din handleDeleteJob-funktion
+                          }}
+                          className="text-[10px] uppercase font-bold rounded-md border border-red-900/50 bg-red-950/40 px-2 py-1 text-red-400 hover:bg-red-600 hover:text-white transition-all duration-200"
+                          title="Delete Job"
+                        >
+                          Delete
+                        </button>
+                      </>
+                    )}
                   </div>
                 </div>
               ))}

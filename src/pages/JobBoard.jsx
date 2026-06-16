@@ -29,9 +29,20 @@ const JobBoard = () => {
 
   const getJobBadge = (createdAt, status) => {
     if (status === "closed") {
-      return { text: "Closed", style: "bg-red-950 text-red-400 border border-red-900/40"} 
+      return {
+        text: "Closed",
+        style: "bg-red-950 text-red-400 border border-red-900/40",
+      };
     }
-  }
+
+    if (!createdAt) return null;
+
+    const createdDate = new Date(createdAt);
+    const today = new Date();
+
+    const diffTime = Math.abs(today - createdAt);
+    const diffDay = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  };
 
   useEffect(() => {
     const fetchJobs = async () => {

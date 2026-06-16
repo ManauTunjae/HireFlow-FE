@@ -1,7 +1,8 @@
 const JobCard = ({ job, onApply }) => {
-  const { title, company, location, salary, description } = job;
+  const { title, company, location, salary, description, createdAt, status } =
+    job;
 
-  const getJobBadge = (createdAt, status) => {
+  const getJobBadge = (createdTime, status) => {
     if (status === "closed") {
       return {
         text: "Closed",
@@ -9,12 +10,12 @@ const JobCard = ({ job, onApply }) => {
       };
     }
 
-    if (!createdAt) return null;
+    if (!createdTime) return null;
 
-    const createdDate = new Date(createdAt);
+    const createdDate = new Date(createdTime);
     const today = new Date();
 
-    const diffTime = Math.abs(today - createdAt);
+    const diffTime = Math.abs(today - createdDate);
     const diffDay = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
     if (diffDay <= 5) {
@@ -35,6 +36,8 @@ const JobCard = ({ job, onApply }) => {
 
     return null;
   };
+
+  const badge = getJobBadge(createdAt, status);
 
   return (
     <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-shadow duration-200 flex flex-col md:flex-row md:items-center md:justify-between gap-4">

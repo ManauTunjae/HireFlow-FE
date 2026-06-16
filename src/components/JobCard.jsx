@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 
-const JobCard = ({ job, onApply }) => {
+const JobCard = ({ job }) => {
   const { title, company, location, salary, description, createdAt, status } =
     job;
   const navigate = useNavigate();

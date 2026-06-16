@@ -120,7 +120,6 @@ const JobFormModal = ({
               >
                 <option value="open">🟢 Open (Visible to candidates)</option>
                 <option value="closed">🔴 Closed (Archive listing)</option>
-                <option value="draft">🟡 Draft (Archive listing)</option>
               </select>
             </div>
           </div>

@@ -46,6 +46,10 @@ const JobBoard = () => {
     if (diffDay <= 5) {
       return { text: "New", style: "bg-blue-950 text-blue-400 border border-blue-800/30 animate-pulse text-[10px] font-black uppercase px-2 py-0.5 rounded-full"}
     }
+
+    if (diffDay >= 7 && diffDay <= 14) {
+      return { text: "Closing Soon ⏳", style: "bg-amber-950 text-amber-400 border border-amber-900/30 text-[10px] font-black uppercase px-2 py-0.5 rounded-full" };
+    }
   };
 
   useEffect(() => {

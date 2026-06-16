@@ -42,6 +42,10 @@ const JobBoard = () => {
 
     const diffTime = Math.abs(today - createdAt);
     const diffDay = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+    if (diffDay <= 5) {
+      return { text: "New", style: "bg-blue-950 text-blue-400 border border-blue-800/30 animate-pulse text-[10px] font-black uppercase px-2 py-0.5 rounded-full"}
+    }
   };
 
   useEffect(() => {

@@ -27,6 +27,12 @@ const JobBoard = () => {
 
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
+  const getJobBadge = (createdAt, status) => {
+    if (status === "closed") {
+      return { text: "Closed", style: "bg-red-950 text-red-400 border border-red-900/40"} 
+    }
+  }
+
   useEffect(() => {
     const fetchJobs = async () => {
       try {

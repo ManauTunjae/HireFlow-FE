@@ -233,9 +233,7 @@ const Dashboard = () => {
                         className={`text-[9px] font-black uppercase px-2 py-0.5 rounded-full border tracking-wide shrink-0 ${
                           job.status === "open"
                             ? "bg-green-950 text-green-400 border-green-900/30"
-                            : job.status === "draft"
-                              ? "bg-amber-950 text-amber-500 border-amber-900/30" // 🟡 Snygg mörk gul-orange (amber)
-                              : "bg-red-950 text-red-400 border-red-800/30"
+                            : "bg-red-950 text-red-400 border-red-800/30"
                         }`}
                       >
                         {job.status}
@@ -303,9 +301,7 @@ const Dashboard = () => {
                   className={`text-[15px] font-black uppercase px-2 py-0.5 rounded-full border tracking-wide shrink-0 ${
                     selectedJob.status === "open"
                       ? "bg-green-950 text-green-400 border-green-900/30"
-                      : selectedJob.status === "draft"
-                        ? "bg-amber-950 text-amber-500 border-amber-900/30" // 🟡 Snygg mörk gul-orange (amber)
-                        : "bg-red-950 text-red-400 border-red-800/30"
+                      : "bg-red-950 text-red-400 border-red-800/30"
                   }`}
                 >
                   {selectedJob.status || "open"}

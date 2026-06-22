@@ -1,6 +1,9 @@
-const JobCard = ({ job, onApply }) => {
-  const { title, company, location, salary, description, createdAt, status } =
+import { useNavigate } from "react-router-dom";
+
+const JobCard = ({ job }) => {
+  const { title, company, location, salary, description, createdAt, status, _id } =
     job;
+  const navigate = useNavigate();
 
   const getJobBadge = (createdTime, status) => {
     if (status === "closed") {
@@ -50,7 +53,6 @@ const JobCard = ({ job, onApply }) => {
               {badge.text}
             </span>
           )}
-
         </div>
 
         <h3 className="text-xl font-bold text-gray-900 pt-1">{title}</h3>
@@ -77,15 +79,10 @@ const JobCard = ({ job, onApply }) => {
 
       <div className="flex items-center mt-4 md:mt-0 shrink-0">
         <button
-          disabled={status === "closed"}
-          onClick={onApply}
-          className={`w-full md:w-auto px-5 py-2.5 text-sm font-semibold rounded-lg transition-colors ${
-            status === "closed"
-              ? "bg-red-50 text-red-500 border border-red-200 cursor-not-allowed font-medium"
-              : "bg-gray-950 text-white hover:bg-gray-800 cursor-pointer"
-          }`}
+          onClick={() => navigate(`/jobs/${_id}`)}
+          className="w-full md:w-auto px-5 py-2.5 text-sm font-semibold border border-gray-400/70 rounded-lg transition-colors"
         >
-          {status === "closed" ? "Closed" : "Apply Now"}
+          View Details
         </button>
       </div>
     </div>

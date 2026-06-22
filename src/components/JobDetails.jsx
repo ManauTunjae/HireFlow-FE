@@ -32,7 +32,7 @@ const JobDetails = () => {
     );
   }
 
-  if (job) {
+  if (!job) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 gap-4">
         <p className="text-gray-600 font-bold">Job not found 🔍</p>
@@ -45,6 +45,92 @@ const JobDetails = () => {
       </div>
     );
   }
-  return <></>;
+  return (
+    <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-6xl mx-auto bg-white rounded-2xl border border-gray-200 p-8 shadow-xs">
+        {/* Tillbaka-knapp */}
+        <button
+          onClick={() => navigate("/")}
+          className="text-[1rem] font-bold text-gray-500 hover:text-gray-900 transition-colors mb-6 flex items-center gap-1 cursor-pointer"
+        >
+          ⬅️ Back to all jobs
+        </button>
+
+        {/* Header */}
+        <div className="border-b border-gray-100 pb-6">
+          <h1 className="text-3xl font-black text-gray-900 tracking-tight">
+            {job.title}
+          </h1>
+          <div className="flex flex-wrap gap-x-4 gap-y-2 text-md text-gray-500 font-medium mt-2">
+            <span>🏢 {job.company}</span>
+            <span>📍 {job.location}</span>
+            {job.salary && (
+              <span className="text-emerald-600 font-semibold">
+                {job.salary}
+              </span>
+            )}
+          </div>
+        </div>
+
+        {/* Beskrivning */}
+        <div className="py-6 border-b border-gray-100">
+          <h2 className="text-md font-bold uppercase tracking-wider text-gray-400 mb-3">
+            About the role
+          </h2>
+          <p className="text-gray-700 text-[1.1rem] leading-relaxed whitespace-pre-line">
+            {job.description}
+          </p>
+        </div>
+
+        {/* Kravlista (Requirements) 📝 */}
+        {job.requirements && job.requirements.length > 0 && (
+          <div className="py-6 border-b border-gray-100">
+            <h2 className="text-md font-bold uppercase tracking-wider text-gray-400 mb-3">
+              Requirements
+            </h2>
+            <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+              {job.requirements.map((req, index) => (
+                <li
+                  key={index}
+                  className="flex items-center gap-2 text-sm text-gray-600 bg-gray-50 border border-gray-200/60 px-3 py-2 rounded-lg"
+                >
+                  <span className="text-emerald-500 text-md">✓</span> {req}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        {/* Action-del (Apply) */}
+        <div className="pt-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <div>
+            <p className="text-md font-bold text-gray-400">Status</p>
+            <p
+              className={`text-sm font-bold ${job.status === "closed" ? "text-red-500" : "text-green-600"}`}
+            >
+              {job.status === "closed"
+                ? "Closed"
+                : "Open & Accepting Applications"}
+            </p>
+          </div>
+
+          <button
+            disabled={job.status === "closed"}
+            onClick={() => {
+              // 🎯 HÄR triggar vi din Apply-Modal eller öppnar formuläret!
+              alert("Här öppnar vi ansökningsformuläret! 🚀");
+            }}
+            className={`px-8 py-3 rounded-xl text-sm font-bold transition-all text-center ${
+              job.status === "closed"
+                ? "bg-red-50 text-red-500 border border-red-200 cursor-not-allowed"
+                : "bg-green-700 text-white hover:bg-green-950 cursor-pointer shadow-md shadow-black/5"
+            }`}
+          >
+            {job.status === "closed" ? "Closed" : "Apply for this job"}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
 };
 export default JobDetails;

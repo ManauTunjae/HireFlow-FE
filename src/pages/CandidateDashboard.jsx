@@ -229,7 +229,7 @@ const CandidateDashboard = () => {
                     <tbody className="divide-y divide-gray-100 font-medium text-gray-700">
                       {myApplications.map((app) => {
                         // 🎯 OPTIMERING: Läser direkt från ditt populatade jobId-objekt!
-                        const job = app.jobId || {};
+                        const job = (typeof app.jobId === "object" ? app.jobId : app.job) || {};
                         return (
                           <tr key={app._id} className="hover:bg-gray-50/30 transition-colors">
                             <td className="p-4 pl-5 font-bold text-gray-900">{job.title || "Unknown Position"}</td>

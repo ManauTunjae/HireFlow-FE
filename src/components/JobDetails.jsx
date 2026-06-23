@@ -34,6 +34,48 @@ const JobDetails = () => {
     fetchJobDetails();
   }, [id]);
 
+  const handleApplySubmit = async (e) => {
+    e.preventDefault();
+    setSubmitLoading(true);
+
+    try {
+      const uploadData = new FormData();
+
+      uploadData.append("jobId", applyingJob._id);
+      uploadData.append("name", formData.name);
+      uploadData.append("email", formData.email);
+      uploadData.append("phone", formData.phone);
+
+      if (formData.linkedIn) uploadData.append("LinkedIn", formData.linkedIn);
+      if (formData.github) uploadData.append("Github", formData.github);
+
+      if (resume) uploadData.append("resume", resume);
+      if (coverLetter) uploadData.append("coverLetter", coverLetter);
+
+      const response = await api.post("api/candidates", uploadData);
+      console.log("Application submitted successfully:", response.data);
+
+      alert("Your application has been submitted successfully! 🎉");
+      setIsApplyModalOpen(false);
+      setFormData({
+        name: "",
+        email: "",
+        phone: "",
+        linkedIn: "",
+        github: "",
+      });
+      setResume(null);
+      setCoverLetter(null);
+    } catch (error) {
+      console.error("Error submitting application:", error);
+      alert(
+        error.response?.data?.message || "Something went wrong when applying.",
+      );
+    } finally {
+      setSubmitLoading(false);
+    }
+  };
+
   if (Loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">

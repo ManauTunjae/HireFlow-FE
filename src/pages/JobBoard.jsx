@@ -219,8 +219,7 @@ const JobBoard = () => {
         </div>
       </nav>
 
-      <header className="w-full border-b border-gray-200">
-        
+      <header className="w-full border-b border-gray-200 flex justify-center">
         {/* 📱 MOBILBILD: Visas på små skärmar, göms från surfplatta/dator (md:hidden) */}
         <img
           src="/hireflow-banner-mobile.png" // 👈 Din nya kvadratiska Canva-bild!
@@ -232,9 +231,8 @@ const JobBoard = () => {
         <img
           src="/hireflow-banner.png" // 👈 Din nuvarande breda Canva-bild!
           alt="HireFlow Banner Desktop"
-          className="hidden md:block w-full h-[350px] lg:h-[530px] object-cover object-center"
+          className="hidden md:block w-full h-auto aspect-[3.5/1] object-cover object-center"
         />
-        
       </header>
 
       <main className="max-w-5xl mx-auto px-5 py-12">

@@ -205,11 +205,9 @@ const JobBoard = () => {
           </div>
         </div>
 
-        <div className="text-2xl font-bold mb-6 text-gray-800">
-          <h2 className="text-2xl font-bold mb-6 text-gray-800">
-            {searchQuery ? "Search Results" : "Latest Jobs Listings"}
-          </h2>
-        </div>
+        <h2 className="text-2xl font-bold mb-6 text-gray-800">
+          {searchQuery ? "Search Results" : "Latest Jobs Listings"}
+        </h2>
 
         <div className="mb-8">
           {loading ? (

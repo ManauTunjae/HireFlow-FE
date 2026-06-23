@@ -7,6 +7,18 @@ const JobDetails = () => {
   const navigate = useNavigate();
   const [job, setJob] = useState(null);
   const [Loading, setLoading] = useState(true);
+    const [isApplyModalOpen, setIsApplyModalOpen] = useState(false);
+  const [applyingJob, setApplyingJob] = useState(null);
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    linkedIn: "",
+    github: "",
+  });
+  const [resume, setResume] = useState(null);
+  const [coverLetter, setCoverLetter] = useState(null);
+  const [submitLoading, setSubmitLoading] = useState(false);
 
   useEffect(() => {
     const fetchJobDetails = async () => {

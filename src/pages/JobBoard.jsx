@@ -12,19 +12,6 @@ const JobBoard = () => {
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
-  const [isApplyModalOpen, setIsApplyModalOpen] = useState(false);
-  const [applyingJob, setApplyingJob] = useState(null);
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    linkedIn: "",
-    github: "",
-  });
-  const [resume, setResume] = useState(null);
-  const [coverLetter, setCoverLetter] = useState(null);
-  const [submitLoading, setSubmitLoading] = useState(false);
-
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {

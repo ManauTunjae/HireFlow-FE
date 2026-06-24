@@ -64,7 +64,7 @@ const AuthModal = ({ isOpen, onClose }) => {
       if (result.success) {
         onClose();
 
-        const savedUser = JSON.parse(localStorage.getItem("recruiter_user"));
+        const savedUser = JSON.parse(localStorage.getItem("hireflow_user"));
 
         if (savedUser.role === "candidate") {
           navigate("/");

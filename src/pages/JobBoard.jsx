@@ -83,9 +83,9 @@ const JobBoard = () => {
                         : "/recruiter-dashboard",
                     )
                   }
-                  className="text-black bg-white/10 border border-white/10 px-4 py-1.5 text-xs font-bold tracking-widest uppercase cursor-pointer rounded-full shadow-[0_4px_10px_rgba(63,65,68,0.386)] transition-all duration-300 hover:scale-110 hover:bg-white/45 hover:border-white/60"
+                  className="text-black bg-white/75 border border-white/10 px-4 py-1.5 text-xs font-bold tracking-widest uppercase cursor-pointer rounded-full shadow-[0_4px_10px_rgba(63,65,68,0.386)] transition-all duration-300 hover:scale-110 hover:bg-white hover:border-white/60"
                 >
-                  Dashboard 📊
+                  👤 {user.username} - Dashboard 📊
                 </button>
                 <button
                   onClick={() => logout(navigate)}
@@ -205,11 +205,9 @@ const JobBoard = () => {
           </div>
         </div>
 
-        <div className="text-2xl font-bold mb-6 text-gray-800">
-          <h2 className="text-2xl font-bold mb-6 text-gray-800">
-            {searchQuery ? "Search Results" : "Latest Jobs Listings"}
-          </h2>
-        </div>
+        <h2 className="text-2xl font-bold mb-6 text-gray-800">
+          {searchQuery ? "Search Results" : "Latest Jobs Listings"}
+        </h2>
 
         <div className="mb-8">
           {loading ? (

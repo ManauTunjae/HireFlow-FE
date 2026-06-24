@@ -233,7 +233,9 @@ const Dashboard = () => {
                         className={`text-[9px] font-black uppercase px-2 py-0.5 rounded-full border tracking-wide shrink-0 ${
                           job.status === "open"
                             ? "bg-green-950 text-green-400 border-green-900/30"
-                            : "bg-red-950 text-red-400 border-red-800/30"
+                            : job.status === "draft"
+                              ? "bg-amber-950 text-amber-500 border-amber-900/30" // 🟡 Snygg mörk gul-orange (amber)
+                              : "bg-red-950 text-red-400 border-red-800/30"
                         }`}
                       >
                         {job.status}
@@ -301,7 +303,9 @@ const Dashboard = () => {
                   className={`text-[15px] font-black uppercase px-2 py-0.5 rounded-full border tracking-wide shrink-0 ${
                     selectedJob.status === "open"
                       ? "bg-green-950 text-green-400 border-green-900/30"
-                      : "bg-red-950 text-red-400 border-red-800/30"
+                      : selectedJob.status === "draft"
+                        ? "bg-amber-950 text-amber-500 border-amber-900/30" // 🟡 Snygg mörk gul-orange (amber)
+                        : "bg-red-950 text-red-400 border-red-800/30"
                   }`}
                 >
                   {selectedJob.status || "open"}
@@ -332,18 +336,53 @@ const Dashboard = () => {
                         (cand) => (
                           <div
                             key={cand._id}
-                            className="bg-gray-900 border border-gray-800 rounded-xl p-3 shadow-xs"
+                            className="bg-gray-900 border border-gray-800 rounded-xl p-3 shadow-xs space-y-2.5"
                           >
-                            <h4 className="font-bold text-xs text-white">
-                              {cand.name}
-                            </h4>
-                            <p className="text-[10px] text-gray-400 mt-0.5">
-                              {cand.email}
-                            </p>
-                            <p className="text-[10px] text-gray-500 mt-0.5">
-                              📞 {cand.phone}
-                            </p>
-                            <div className="border-t border-gray-800/60 pt-2 mt-1">
+                            <div>
+                              <h4 className="font-bold text-xs text-white">
+                                {cand.name}
+                              </h4>
+                              <p className="text-[10px] text-gray-400 mt-0.5">
+                                {cand.email}
+                              </p>
+                              <p className="text-[10px] text-gray-500 mt-0.5">
+                                📞 {cand.phone}
+                              </p>
+                            </div>
+
+                            {/* 📄 CLOUDINARY DOKUMENT */}
+                            <div className="bg-gray-950/40 p-2 rounded-lg border border-gray-800/60 space-y-1">
+                              <span className="block text-[9px] font-black uppercase tracking-wider text-gray-600 mb-1">
+                                Documents
+                              </span>
+                              {cand.resume ? (
+                                <a
+                                  href={cand.resume}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="flex items-center gap-1.5 text-[11px] font-bold text-emerald-400 hover:text-emerald-300 transition-colors"
+                                >
+                                  📄 View Resume (CV)
+                                </a>
+                              ) : (
+                                <span className="text-[11px] text-red-400/70 block">
+                                  ⚠️ Missing CV
+                                </span>
+                              )}
+
+                              {cand.coverLetter && (
+                                <a
+                                  href={cand.coverLetter}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="flex items-center gap-1.5 text-[11px] font-bold text-indigo-400 hover:text-indigo-300 transition-colors pt-0.5"
+                                >
+                                  ✉️ Cover Letter
+                                </a>
+                              )}
+                            </div>
+
+                            <div className="border-t border-gray-800/60 pt-2">
                               <label className="block text-[10px] font-black uppercase tracking-wider text-gray-500 mb-1">
                                 Change Stage
                               </label>
@@ -399,18 +438,55 @@ const Dashboard = () => {
                       ).map((cand) => (
                         <div
                           key={cand._id}
-                          className="bg-gray-900 border border-gray-800 rounded-xl p-3 shadow-xs"
+                          className="bg-gray-900 border border-gray-800 rounded-xl p-3 shadow-xs space-y-2.5"
                         >
-                          <h4 className="font-bold text-xs text-white">
-                            {cand.name}
-                          </h4>
-                          <p className="text-[10px] text-gray-400 mt-0.5">
-                            {cand.email}
-                          </p>
-                          <p className="text-[10px] text-gray-500 mt-0.5">
-                            📞 {cand.phone}
-                          </p>
-                          <div className="border-t border-gray-800/60 pt-2 mt-1">
+                          <div>
+                            <h4 className="font-bold text-xs text-white">
+                              {cand.name}
+                            </h4>
+                            <p className="text-[10px] text-gray-400 mt-0.5">
+                              {cand.email}
+                            </p>
+                            <p className="text-[10px] text-gray-500 mt-0.5">
+                              📞 {cand.phone}
+                            </p>
+                          </div>
+
+                          {/* 📄 CLOUDINARY DOKUMENT */}
+                          <div className="bg-gray-950/40 p-2 rounded-lg border border-gray-800/60 space-y-1">
+                            <span className="block text-[9px] font-black uppercase tracking-wider text-gray-600 mb-1">
+                              Documents
+                            </span>
+                            {cand.resume ? (
+                              <a
+                                href={`/api/candidates/${cand._id}/download/resume`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                download
+                                className="flex items-center gap-1.5 text-[11px] font-bold text-emerald-400 hover:text-emerald-300 transition-colors"
+                              >
+                                📄 View Resume (CV)
+                              </a>
+                            ) : (
+                              <span className="text-[11px] text-red-400/70 block">
+                                ⚠️ Missing CV
+                              </span>
+                            )}
+
+                            {cand.coverLetter && (
+                              <a
+                                href={`/api/candidates/${cand._id}/download/coverLetter`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                download
+                                className="flex items-center gap-1.5 text-[11px] font-bold text-indigo-400 hover:text-indigo-300 transition-colors pt-0.5"
+                              >
+                                ✉️ Cover Letter
+                              </a>
+                            )}
+                          </div>
+
+                          <div className="border-t border-gray-800/60 pt-2">
                             <label className="block text-[10px] font-black uppercase tracking-wider text-gray-500 mb-1">
                               Change Stage
                             </label>

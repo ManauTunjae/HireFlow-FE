@@ -61,15 +61,22 @@ const JobBoard = () => {
     <div className="min-h-screen bg-green-50 text-gray-900">
       {/* Login */}
       {/* Responsiv Nav */}
-      <nav className="sticky top-0 bg-green-900/80 backdrop-blur-md border-b border-green-800 px-6 py-4 z-40">
+      <nav className="sticky top-0 bg-green-800 backdrop-blur-md border-b border-green-800 px-6 py-4 z-40">
         <div className="max-w-auto mx-auto flex justify-between items-center relative">
           {/* Logga */}
-          <span
+          <div
             onClick={() => navigate("/")}
-            className="text-2xl font-black text-white tracking-tighter cursor-pointer"
+            className="flex items-center gap-2 text-2xl font-black text-white tracking-tighter cursor-pointer select-none"
           >
-            Hire<span className="text-green-400">Flow</span>
-          </span>
+            <img
+              src="/hireflow-logo.svg"
+              alt="HireFlow logo"
+              className="w-8 h-8 object-contain transition-transform duration-200 hover:scale-105"
+            />
+            <span>
+              Hire<span className="text-green-400">Flow</span>
+            </span>
+          </div>
 
           {/* 💻 DESKTOP-MENY: Visas från surfplatta/dator (lg:flex) */}
           <div className="hidden lg:flex items-center gap-6 pr-2">
@@ -106,7 +113,7 @@ const JobBoard = () => {
           </div>
 
           {/* 📱 MOBIL-HÖGERSIDA: Visas under 1024px (lg:hidden) */}
-          <div className="lg:hidden flex items-center gap-2 pr-3">
+          <div className="lg:hidden flex items-center gap-2 pr-0">
             {user ? (
               /* Om inloggad: Visa bara hamburgarknappen på mobilen 🍔 */
               <button
@@ -118,7 +125,7 @@ const JobBoard = () => {
             ) : (
               <button
                 onClick={() => setIsAuthModalOpen(true)}
-                className="text-sm font-bold text-gray-700 bg-white border border-gray-200 px-3 py-1.5 rounded-full shadow-xs active:scale-95 transition-all"
+                className="text-sm font-bold text-gray-700 bg-white border border-gray-200 px-4 py-1.5 rounded-full shadow-xs active:scale-95 transition-all"
               >
                 Sign In
               </button>

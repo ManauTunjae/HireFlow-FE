@@ -61,7 +61,7 @@ const JobBoard = () => {
     <div className="min-h-screen bg-green-50 text-gray-900">
       {/* Login */}
       {/* Responsiv Nav */}
-      <nav className="sticky top-0 bg-green-800 backdrop-blur-md border-b border-green-800 px-6 py-4 z-40">
+      <nav className="sticky top-0 bg-gradient-to-r from-blue-400 to-green-400 backdrop-blur-md border-b border-green-800 px-6 py-4 z-40">
         <div className="max-w-auto mx-auto flex justify-between items-center relative">
           {/* Logga */}
           <div
@@ -74,7 +74,7 @@ const JobBoard = () => {
               className="w-8 h-8 object-contain transition-transform duration-200 hover:scale-105"
             />
             <span>
-              Hire<span className="text-green-400">Flow</span>
+              Hire<span className="text-green-300">Flow</span>
             </span>
           </div>
 

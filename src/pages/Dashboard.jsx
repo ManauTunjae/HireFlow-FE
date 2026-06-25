@@ -180,7 +180,7 @@ const Dashboard = () => {
           </span>
           <button
             onClick={() => logout(navigate)}
-            className="px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white text-sm font-bold rounded-lg ml-4 transition-colors"
+            className="px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white text-sm font-bold rounded-full ml-4 transition-colors"
           >
             Sign out
           </button>
@@ -327,7 +327,7 @@ const Dashboard = () => {
                   <div className="space-y-2">
                     {getCandidatesForStage(selectedJob._id, "applied")
                       .length === 0 ? (
-                      <div className="bg-gray-900/20 border border-gray-800/60 rounded-xl p-4 text-center border-dashed text-[11px] text-gray-600">
+                      <div className="bg-gray-900/20 border border-gray-800/60 rounded-xl p-4 text-center border-dashed text-sm text-gray-400">
                         No candidates applied yet
                       </div>
                     ) : (
@@ -344,14 +344,14 @@ const Dashboard = () => {
                               <p className="text-sm text-gray-400 mt-0.5">
                                 {cand.email}
                               </p>
-                              <p className="text-sm text-gray-500 mt-0.5">
+                              <p className="text-sm text-gray-400 mt-0.5">
                                 📞 {cand.phone}
                               </p>
                             </div>
 
                             {/* 📄 CLOUDINARY DOKUMENT */}
                             <div className="bg-gray-950/40 p-2 rounded-lg border border-gray-800/60 space-y-1">
-                              <span className="block text-xs font-black uppercase tracking-wider text-gray-600 mb-1">
+                              <span className="block text-xs font-black uppercase tracking-wider text-gray-500 mb-1">
                                 Documents
                               </span>
                               {cand.resume ? (
@@ -359,7 +359,7 @@ const Dashboard = () => {
                                   href={cand.resume}
                                   target="_blank"
                                   rel="noopener noreferrer"
-                                  className="flex items-center gap-1.5 text-[11px] font-bold text-emerald-400 hover:text-emerald-300 transition-colors"
+                                  className="flex items-center gap-1.5 text-sm font-bold text-emerald-400 hover:text-emerald-300 transition-colors"
                                 >
                                   📄 View Resume (CV)
                                 </a>
@@ -374,7 +374,7 @@ const Dashboard = () => {
                                   href={cand.coverLetter}
                                   target="_blank"
                                   rel="noopener noreferrer"
-                                  className="flex items-center gap-1.5 text-[11px] font-bold text-indigo-400 hover:text-indigo-300 transition-colors pt-0.5"
+                                  className="flex items-center gap-1.5 text-sm font-bold text-indigo-400 hover:text-indigo-300 transition-colors pt-0.5"
                                 >
                                   ✉️ Cover Letter
                                 </a>
@@ -427,7 +427,7 @@ const Dashboard = () => {
                   <div className="space-y-2">
                     {getCandidatesForStage(selectedJob._id, "interviewing")
                       .length === 0 ? (
-                      <div className="bg-gray-900/20 border border-gray-800/60 rounded-xl p-4 text-center border-dashed text-[11px] text-gray-600">
+                      <div className="bg-gray-900/20 border border-gray-800/60 rounded-xl p-4 text-center border-dashed text-sm text-gray-400">
                         No candidates interviewing yet
                       </div>
                     ) : (
@@ -446,14 +446,14 @@ const Dashboard = () => {
                             <p className="text-sm text-gray-400 mt-0.5">
                               {cand.email}
                             </p>
-                            <p className="text-sm text-gray-500 mt-0.5">
+                            <p className="text-sm text-gray-400 mt-0.5">
                               📞 {cand.phone}
                             </p>
                           </div>
 
                           {/* 📄 CLOUDINARY DOKUMENT */}
                           <div className="bg-gray-950/40 p-2 rounded-lg border border-gray-800/60 space-y-1">
-                            <span className="block text-xs font-black uppercase tracking-wider text-gray-600 mb-1">
+                            <span className="block text-xs font-black uppercase tracking-wider text-gray-500 mb-1">
                               Documents
                             </span>
                             {cand.resume ? (
@@ -462,7 +462,7 @@ const Dashboard = () => {
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 download
-                                className="flex items-center gap-1.5 text-[11px] font-bold text-emerald-400 hover:text-emerald-300 transition-colors"
+                                className="flex items-center gap-1.5 text-sm font-bold text-emerald-400 hover:text-emerald-300 transition-colors"
                               >
                                 📄 View Resume (CV)
                               </a>
@@ -478,7 +478,7 @@ const Dashboard = () => {
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 download
-                                className="flex items-center gap-1.5 text-[11px] font-bold text-indigo-400 hover:text-indigo-300 transition-colors pt-0.5"
+                                className="flex items-center gap-1.5 text-sm font-bold text-indigo-400 hover:text-indigo-300 transition-colors pt-0.5"
                               >
                                 ✉️ Cover Letter
                               </a>

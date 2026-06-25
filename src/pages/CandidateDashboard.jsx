@@ -104,7 +104,7 @@ const CandidateDashboard = () => {
             </Link>
             <button
               onClick={() => logout(navigate)}
-              className="px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white text-sm font-bold rounded-lg transition-colors"
+              className="px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white text-sm font-bold rounded-full transition-colors"
             >
               Sign out
             </button>

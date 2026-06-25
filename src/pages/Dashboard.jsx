@@ -175,12 +175,12 @@ const Dashboard = () => {
         </div>
 
         <div className="flex items-center justify-between w-full sm:w-auto border-t sm:border-t-0 pt-2 sm:pt-0 border-gray-800 sm:gap-4">
-          <span className="text-xs font-bold text-gray-600 bg-gray-100 px-3 py-1.5 rounded-full truncate max-w-[160px]">
+          <span className="text-base font-bold text-gray-600 bg-gray-100 px-3 py-1.5 rounded-full truncate max-w-[160px]">
             👤 {user?.username}
           </span>
           <button
             onClick={() => logout(navigate)}
-            className="px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white text-xs font-bold rounded-lg ml-4 transition-colors"
+            className="px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white text-sm font-bold rounded-lg ml-4 transition-colors"
           >
             Sign out
           </button>
@@ -196,13 +196,13 @@ const Dashboard = () => {
               <h2 className="text-sm font-black uppercase tracking-wider text-gray-400">
                 My Jobs
               </h2>
-              <p className="text-[12px] text-gray-600 font-medium">
+              <p className="text-sm text-gray-600 font-medium">
                 Manage listings ({jobs.length})
               </p>
             </div>
             <button
               onClick={() => setIsModalOpen(true)}
-              className="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold rounded-lg transition-all"
+              className="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-bold rounded-lg transition-all"
             >
               + New Job
             </button>
@@ -218,7 +218,7 @@ const Dashboard = () => {
                 <div
                   key={job._id}
                   onClick={() => setSelectedJob(job)}
-                  className={`p-3.5 rounded-xl border text-left cursor-pointer transition-all min-w-[240px] lg:min-w-0 group ${
+                  className={`p-3.5 rounded-xl border text-left cursor-pointer transition-all min-w-[300px] lg:min-w-0 group ${
                     selectedJob?._id === job._id
                       ? "bg-gray-900 border-indigo-500/50 shadow-lg shadow-black/44"
                       : "bg-gray-900/50 border-gray-800/80 hover:border-gray-700"
@@ -226,30 +226,29 @@ const Dashboard = () => {
                 >
                   <div className="flex justify-between items-start gap-3 w-full">
                     <div className="flex items-center gap-2 min-w-0 flex-1">
-                      <h3 className="font-bold text-xs text-white truncate">
+                      <h3 className="font-bold text-base text-white truncate">
                         {job.title}
                       </h3>
                       <span
-                        className={`text-[9px] font-black uppercase px-2 py-0.5 rounded-full border tracking-wide shrink-0 ${
+                        className={`text-[13px] font-black uppercase px-2 py-0.5 rounded-full border tracking-wide shrink-0 ${
                           job.status === "open"
                             ? "bg-green-950 text-green-400 border-green-900/30"
                             : job.status === "draft"
-                              ? "bg-amber-950 text-amber-500 border-amber-900/30" // 🟡 Snygg mörk gul-orange (amber)
+                              ? "bg-amber-950 text-amber-500 border-amber-900/30"
                               : "bg-red-950 text-red-400 border-red-800/30"
                         }`}
                       >
                         {job.status}
                       </span>
                     </div>
-                    {/* HÄR: Nu räknas antalet kandidater live för detta specifika jobb! 🔥 */}
-                    <span className="text-[12px] font-bold px-1.5 py-0.5 bg-indigo-950/50 text-indigo-400 rounded-md shrink-0 border border-indigo-800/30">
+                    <span className="text-[13px] font-bold px-1.5 py-0.5 bg-indigo-950/50 text-indigo-400 rounded-md shrink-0 border border-indigo-800/30">
                       {getCandidateCountForJob(job._id)} Cand
                     </span>
                   </div>
-                  <p className="text-[10px] text-gray-500 mt-1 truncate">
+                  <p className="text-[13px] text-gray-500 mt-1 truncate">
                     {job.company}
                   </p>
-                  <p className="text-[9px] text-gray-600 mt-0.5 truncate">
+                  <p className="text-[13px] text-gray-600 mt-0.5 truncate">
                     📍 {job.location}
                   </p>
                   <div className="mt-4 flex items-center gap-2 h-8">
@@ -257,11 +256,11 @@ const Dashboard = () => {
                       <>
                         <button
                           onClick={(e) => {
-                            e.stopPropagation(); // Hindrar att kortet klickas och öppnas/stängs konstigt
+                            e.stopPropagation();
                             setEditingJob(job);
                             setIsModalOpen(true);
                           }}
-                          className="text-[10px] uppercase font-bold rounded-md border border-gray-700 bg-gray-800 px-2 py-1 text-yellow-300 hover:bg-yellow-500 hover:text-black transition-all duration-200"
+                          className="text-sm uppercase font-bold rounded-md border border-gray-700 bg-gray-800 px-2 py-1 text-yellow-300 hover:bg-yellow-500 hover:text-black transition-all duration-200"
                           title="Edit Job"
                         >
                           Edit
@@ -270,9 +269,9 @@ const Dashboard = () => {
                         <button
                           onClick={(e) => {
                             e.stopPropagation();
-                            handleDeleteJob(job._id); // Eller din handleDeleteJob-funktion
+                            handleDeleteJob(job._id);
                           }}
-                          className="text-[10px] uppercase font-bold rounded-md border border-red-900/50 bg-red-950/40 px-2 py-1 text-red-400 hover:bg-red-600 hover:text-white transition-all duration-200"
+                          className="text-sm uppercase font-bold rounded-md border border-red-900/50 bg-red-950/40 px-2 py-1 text-red-400 hover:bg-red-600 hover:text-white transition-all duration-200"
                           title="Delete Job"
                         >
                           Delete
@@ -286,16 +285,16 @@ const Dashboard = () => {
           )}
         </div>
 
-        {/* HÖGERPANEL: KANBAN-VY & DETALJER */}
+        {/* KANBAN-VY & DETALJER */}
         <div className="flex-1 p-4 md:p-6 overflow-y-auto w-full">
           {selectedJob ? (
             <div className="space-y-6">
               <div className="border-b border-gray-900 pb-4 flex justify-between items-start gap-3 w-full">
                 <div>
-                  <h1 className="text-lg md:text-3xl font-black text-white tracking-tight">
+                  <h1 className="text-2xl md:text-3xl font-black text-white tracking-tight">
                     {selectedJob.title}
                   </h1>
-                  <p className="text-[14px] text-gray-500 mt-1">
+                  <p className="text-[15px] text-gray-500 mt-1">
                     🏢 {selectedJob.company} • 📍 {selectedJob.location}
                   </p>
                 </div>
@@ -317,10 +316,10 @@ const Dashboard = () => {
                 {/* 1. APPLIED STAGE */}
                 <div>
                   <div className="flex items-center gap-2 mb-3">
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-gray-400">
+                    <span className="text-md font-bold uppercase tracking-wider text-gray-400">
                       Applied
                     </span>
-                    <span className="px-1.5 py-0.5 bg-gray-900 border border-gray-800 text-gray-400 rounded-md text-[9px] font-bold">
+                    <span className="px-1.5 py-0.5 bg-gray-900 border border-gray-800 text-gray-400 rounded-md text-[10px] font-bold">
                       {getCandidatesForStage(selectedJob._id, "applied").length}
                     </span>
                   </div>
@@ -339,20 +338,20 @@ const Dashboard = () => {
                             className="bg-gray-900 border border-gray-800 rounded-xl p-3 shadow-xs space-y-2.5"
                           >
                             <div>
-                              <h4 className="font-bold text-xs text-white">
+                              <h4 className="font-bold text-md text-white">
                                 {cand.name}
                               </h4>
-                              <p className="text-[10px] text-gray-400 mt-0.5">
+                              <p className="text-sm text-gray-400 mt-0.5">
                                 {cand.email}
                               </p>
-                              <p className="text-[10px] text-gray-500 mt-0.5">
+                              <p className="text-sm text-gray-500 mt-0.5">
                                 📞 {cand.phone}
                               </p>
                             </div>
 
                             {/* 📄 CLOUDINARY DOKUMENT */}
                             <div className="bg-gray-950/40 p-2 rounded-lg border border-gray-800/60 space-y-1">
-                              <span className="block text-[9px] font-black uppercase tracking-wider text-gray-600 mb-1">
+                              <span className="block text-xs font-black uppercase tracking-wider text-gray-600 mb-1">
                                 Documents
                               </span>
                               {cand.resume ? (
@@ -383,7 +382,7 @@ const Dashboard = () => {
                             </div>
 
                             <div className="border-t border-gray-800/60 pt-2">
-                              <label className="block text-[10px] font-black uppercase tracking-wider text-gray-500 mb-1">
+                              <label className="block text-xs font-black uppercase tracking-wider text-gray-500 mb-1">
                                 Change Stage
                               </label>
                               <select
@@ -414,10 +413,10 @@ const Dashboard = () => {
                 {/* 2. INTERVIEWING STAGE */}
                 <div>
                   <div className="flex items-center gap-2 mb-3">
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-gray-400">
+                    <span className="text-md font-bold uppercase tracking-wider text-gray-400">
                       Interviewing
                     </span>
-                    <span className="px-1.5 py-0.5 bg-gray-900 border border-gray-800 text-gray-400 rounded-md text-[9px] font-bold">
+                    <span className="px-1.5 py-0.5 bg-gray-900 border border-gray-800 text-gray-400 rounded-md text-[10px] font-bold">
                       {
                         getCandidatesForStage(selectedJob._id, "interviewing")
                           .length
@@ -441,20 +440,20 @@ const Dashboard = () => {
                           className="bg-gray-900 border border-gray-800 rounded-xl p-3 shadow-xs space-y-2.5"
                         >
                           <div>
-                            <h4 className="font-bold text-xs text-white">
+                            <h4 className="font-bold text-md text-white">
                               {cand.name}
                             </h4>
-                            <p className="text-[10px] text-gray-400 mt-0.5">
+                            <p className="text-sm text-gray-400 mt-0.5">
                               {cand.email}
                             </p>
-                            <p className="text-[10px] text-gray-500 mt-0.5">
+                            <p className="text-sm text-gray-500 mt-0.5">
                               📞 {cand.phone}
                             </p>
                           </div>
 
                           {/* 📄 CLOUDINARY DOKUMENT */}
                           <div className="bg-gray-950/40 p-2 rounded-lg border border-gray-800/60 space-y-1">
-                            <span className="block text-[9px] font-black uppercase tracking-wider text-gray-600 mb-1">
+                            <span className="block text-xs font-black uppercase tracking-wider text-gray-600 mb-1">
                               Documents
                             </span>
                             {cand.resume ? (
@@ -487,7 +486,7 @@ const Dashboard = () => {
                           </div>
 
                           <div className="border-t border-gray-800/60 pt-2">
-                            <label className="block text-[10px] font-black uppercase tracking-wider text-gray-500 mb-1">
+                            <label className="block text-xs font-black uppercase tracking-wider text-gray-500 mb-1">
                               Change Stage
                             </label>
                             <select
@@ -517,10 +516,10 @@ const Dashboard = () => {
                 {/* 3. HIRED STAGE */}
                 <div>
                   <div className="flex items-center gap-2 mb-3">
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-400">
+                    <span className="text-md font-bold uppercase tracking-wider text-emerald-400">
                       Hired
                     </span>
-                    <span className="px-1.5 py-0.5 bg-emerald-950/30 border border-emerald-900/30 text-white rounded-md text-[9px] font-bold">
+                    <span className="px-1.5 py-0.5 bg-emerald-950/30 border border-emerald-900/30 text-white rounded-md text-[10px] font-bold">
                       {getCandidatesForStage(selectedJob._id, "hired").length}
                     </span>
                   </div>
@@ -538,13 +537,13 @@ const Dashboard = () => {
                             key={cand._id}
                             className="bg-green-900/70 border border-emerald-900/20 rounded-xl p-3 shadow-xs"
                           >
-                            <h4 className="font-bold text-xs text-white">
+                            <h4 className="font-bold text-sm text-white">
                               {cand.name}
                             </h4>
-                            <p className="text-[10px] text-gray-200 mt-0.5">
+                            <p className="text-sm text-gray-200 mt-0.5">
                               {cand.email}
                             </p>
-                            <span className="text-[10px] bg-white text-emerald-700 px-1.5 py-0.5 rounded font-bold uppercase mt-2 inline-block">
+                            <span className="text-sm bg-white text-emerald-700 px-1.5 py-0.5 rounded font-bold uppercase mt-2 inline-block">
                               Selected 🎉
                             </span>
                           </div>
@@ -557,10 +556,10 @@ const Dashboard = () => {
                 {/* 4. REJECTED STAGE */}
                 <div>
                   <div className="flex items-center gap-2 mb-3">
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-red-600">
+                    <span className="text-md font-bold uppercase tracking-wider text-red-600">
                       Rejected
                     </span>
-                    <span className="px-1.5 py-0.5 bg-red-950 border border-red-900 text-white rounded-md text-[9px] font-bold">
+                    <span className="px-1.5 py-0.5 bg-red-950 border border-red-900 text-white rounded-md text-[10px] font-bold">
                       {
                         getCandidatesForStage(selectedJob._id, "rejected")
                           .length
@@ -581,13 +580,13 @@ const Dashboard = () => {
                             key={cand._id}
                             className="bg-red-900/50 border border-red-900 rounded-xl p-3 shadow-xs"
                           >
-                            <h4 className="font-bold text-xs text-white">
+                            <h4 className="font-bold text-sm text-white">
                               {cand.name}
                             </h4>
-                            <p className="text-[10px] text-white mt-0.5">
+                            <p className="text-sm text-white mt-0.5">
                               {cand.email}
                             </p>
-                            <span className="text-[10px] bg-white text-red-600 px-1.5 py-0.5 rounded font-bold uppercase mt-2 inline-block">
+                            <span className="text-sm bg-white text-red-600 px-1.5 py-0.5 rounded font-bold uppercase mt-2 inline-block">
                               rejected ❌
                             </span>
                           </div>
